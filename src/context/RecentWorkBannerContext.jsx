@@ -46,7 +46,7 @@ export const RecentWorksBannerContextProvider = ({ children }) => {
   const createRecentWorkBanner = async (data, config) => {
     setLoading(true);
     try {
-      const response = await axios.post("/recent-works", data, config);
+      const response = await axios.post("/recentWorkBanner", data, config);
       if (response.status === 201) {
         getRecentWorksBanner();
         notification.success({

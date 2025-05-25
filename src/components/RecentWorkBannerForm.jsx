@@ -22,12 +22,8 @@ const RecentWorkBannerForm = () => {
   const [form] = Form.useForm();
   const { createRecentWork } = useContext(RecentWorksBannerContext);
   const [series, setSeries] = useState([]);
-
   const [uploadProgress, setUploadProgress] = useState(0); // State for progress
-
   const [images, setImages] = useState([]);
-  const [videos, setVideos] = useState([]);
-  const [thumbnail, setThumbnail] = useState([]);
 
   const getAllSerise = async () => {
     try {
