@@ -159,7 +159,7 @@ const RecentWorkBannerList = () => {
 
       {/* Modal for View */}
       <Modal
-        title="View Recent Work"
+        title="View Recent Work Banner"
         visible={isModalVisibleForView}
         onCancel={handleViewCancel}
         footer={null}
@@ -169,13 +169,19 @@ const RecentWorkBannerList = () => {
         <div>
           <p className="font-semibold text-xl mb-4">
             Project Name:
-            <span className="text-green-500 text-2xl">
+            <span className="ml-1 capitalize text-green-500 text-2xl">
               {selectedRecentWork?.title}
             </span>
           </p>
           <p className="font-semibold text-xl mb-4">
+            Project Name:
+            <span className="ml-1 capitalize text-green-500 text-2xl">
+              {selectedRecentWork?.recentProjectName}
+            </span>
+          </p>
+          <p className="font-semibold text-xl mb-4">
             Prioroty:{" "}
-            <span className="text-green-500 text-2xl">
+            <span className="ml-1 text-green-500 text-2xl">
               {selectedRecentWork?.priority}{" "}
             </span>
           </p>
