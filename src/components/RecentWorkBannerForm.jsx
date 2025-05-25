@@ -1,4 +1,4 @@
-import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
 import {
   Button,
   Form,
@@ -117,76 +117,6 @@ const RecentWorkBannerForm = () => {
         </div>
         {/* Title */}
 
-   
-
-        {/* Image Upload */}
-        <Form.Item
-          className="mb-2 col-span-2"
-          label="Upload Images"
-          name="image"
-          rules={[
-            { required: true, message: "Please upload at least one image!" },
-          ]}
-        >
-          <Upload
-            accept="image/*"
-            action={null}
-            listType="picture-card"
-            fileList={images}
-            onChange={handleImageChange}
-            beforeUpload={() => false} // Prevent automatic upload
-            multiple // Allow multiple image uploads
-          >
-            {images.length >= 40 ? null : uploadButton}
-          </Upload>
-        </Form.Item>
-
-        <div className="col-span-2 flex justify-between">
-          {/* Video Upload */}
-          <Form.Item
-            className="mb-2"
-            name="video"
-            rules={[{ required: true, message: "Please upload a video!" }]}
-            label="Videos"
-          >
-            <Upload
-              listType="picture-card"
-              multiple
-              accept="video/*"
-              fileList={videos}
-              beforeUpload={() => false}
-              onChange={handleVideoChange}
-              maxCount={1}
-            >
-              {videos.length >= 1 ? null : (
-                <div>
-                  <UploadOutlined />
-                  <div style={{ marginTop: 8 }}>Upload Video</div>
-                </div>
-              )}
-            </Upload>
-          </Form.Item>
-
-          {/* Thumbnail Upload */}
-          <Form.Item
-            className="mb-2"
-            label="Thumbnail"
-            name="thumbnail"
-            rules={[{ required: true, message: "Please upload a thumbnail!" }]}
-          >
-            <Upload
-              listType="picture-card"
-              multiple
-              accept="image/*"
-              fileList={thumbnail}
-              beforeUpload={() => false}
-              onChange={handleThumbnailChange}
-              maltiple
-            >
-              {thumbnail.length >= 1 ? null : uploadButton}
-            </Upload>
-          </Form.Item>
-        </div>
         <Form.Item className="col-span-2" name="series" label="Series">
           <Select
             mode="multiple"
@@ -214,6 +144,28 @@ const RecentWorkBannerForm = () => {
               </Select.Option>
             ))}
           </Select>
+        </Form.Item>
+
+        {/* Image Upload */}
+        <Form.Item
+          className="mb-2 col-span-2"
+          label="Upload Images"
+          name="image"
+          rules={[
+            { required: true, message: "Please upload at least one image!" },
+          ]}
+        >
+          <Upload
+            accept="image/*"
+            action={null}
+            listType="picture-card"
+            fileList={images}
+            onChange={handleImageChange}
+            beforeUpload={() => false} // Prevent automatic upload
+            multiple // Allow multiple image uploads
+          >
+            {images.length >= 40 ? null : uploadButton}
+          </Upload>
         </Form.Item>
 
         {uploadProgress > 0 && (
