@@ -24,7 +24,6 @@ const RecentWorkBannerEdit = ({ recentWork, onCancel, visible }) => {
   const { updateRecentWorkBanner, loading } = useContext(
     RecentWorksBannerContext
   );
-  console.log(recentWork);
   const [form] = Form.useForm();
   const [uploadProgress, setUploadProgress] = useState(0);
   const [image, setImage] = useState([]); // New images
@@ -111,7 +110,7 @@ const RecentWorkBannerEdit = ({ recentWork, onCancel, visible }) => {
 
   const handleFileRemove = (file, setList, setListToDelete) => {
     setList((prev) => prev.filter((item) => item.uid !== file.uid)); // Remove from fileList
-    console.log(file.url.replace(import.meta.env.VITE_URL, ""));
+    // console.log(file.url.replace(import.meta.env.VITE_URL, ""));
     setListToDelete((prev) => [
       ...prev,
       file.url.replace(import.meta.env.VITE_URL, ""),
