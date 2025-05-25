@@ -50,8 +50,8 @@ const RecentWorkBannerForm = () => {
     const formData = new FormData();
 
     if (values.title) formData.append("title", values.title);
-    // if (values.priority) formData.append("priority", values.priority);
-    // if (values.status) formData.append("status", values.status);
+    if (values.priority) formData.append("priority", values.priority);
+    if (values.status) formData.append("status", values.status);
     if (recentWorkBanner) formData.append("recentWork", recentWorkBanner);
 
     if (images.length > 0) {
@@ -59,8 +59,6 @@ const RecentWorkBannerForm = () => {
         formData.append("image", image.originFileObj);
       });
     }
-
-
 
     // Set up the config to track the progress
     const config = {
@@ -87,8 +85,6 @@ const RecentWorkBannerForm = () => {
       setUploadProgress(0);
       form.resetFields();
       setImages([]);
-      setVideos([]);
-      setThumbnail([]);
     }
   };
 
@@ -111,6 +107,20 @@ const RecentWorkBannerForm = () => {
           </Form.Item>
         </div>
         {/* Title */}
+
+        <div className="col-span-2">
+          {/* prioroty */}
+          <Form.Item name="priority" label="priority">
+            <Input placeholder="Enter priority" type="number" />
+          </Form.Item>
+
+          <Form.Item name="status" label="status">
+            <Select placeholder="Enter status" name="status">
+              <Select.Option value="active">Active</Select.Option>
+              <Select.Option value="inactive">Inactive</Select.Option>
+            </Select>
+          </Form.Item>
+        </div>
 
         <Form.Item className="col-span-2" name="series" label="Series">
           <Select
