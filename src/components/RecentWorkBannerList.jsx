@@ -185,6 +185,12 @@ const RecentWorkBannerList = () => {
               {selectedRecentWork?.priority}{" "}
             </span>
           </p>
+          <p className="font-semibold text-xl mb-4">
+            Status:{" "}
+            <span className="ml-1 capitalize text-green-500 text-2xl">
+              {selectedRecentWork?.status}{" "}
+            </span>
+          </p>
         </div>
         <p style={{ fontWeight: "bold" }}>Images:</p>
         <Row gutter={[16, 16]}>
