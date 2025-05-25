@@ -129,13 +129,37 @@ export const RecentWorksBannerContextProvider = ({ children }) => {
     }
   };
 
+  const updateRecentWorkBanner = async (id, data, config) => {
+    setLoading(true);
+    try {
+      const response = await axios.patch(`/recentWorkBanner/${id}`, data, config);
+      if (response.status === 200) {
+        // getRecentWorks();
+        notification.success({
+          duration: 2,
+          message: "Recent work updated successfully!",
+        });
+      }
+    } catch (error) {
+      console.error(error.message);
+      notification.error({
+        message: error.response.data.message
+          ? error.response.data.message
+          : error.message,
+        duration: 2,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <RecentWorksBannerContext.Provider
       value={{
         recentWorks,
         setRecentWorks,
         createRecentWork,
-        updateRecentWork,
+        updateRecentWorkBanner,
         deleteRecentWorkBanner,
         loading,
       }}

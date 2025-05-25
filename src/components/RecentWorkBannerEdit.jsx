@@ -12,7 +12,7 @@ import {
 import PropTypes from "prop-types";
 import { useContext, useEffect, useState } from "react";
 import axios from "../axios";
-import RecentWorksContext from "../context/RecentWorksContext";
+import RecentWorksBannerContext from "../context/RecentWorkBannerContext";
 
 const uploadButton = (
   <div>
@@ -21,7 +21,7 @@ const uploadButton = (
   </div>
 );
 const RecentWorkBannerEdit = ({ recentWork, onCancel, visible }) => {
-  const { updateRecentWork, loading } = useContext(RecentWorksContext);
+  const { updateRecentWorkBanner, loading } = useContext(RecentWorksBannerContext);
   console.log(recentWork);
   const [form] = Form.useForm();
   const [uploadProgress, setUploadProgress] = useState(0);

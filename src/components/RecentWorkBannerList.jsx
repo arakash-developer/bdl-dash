@@ -1,6 +1,7 @@
 import { Button, Col, Image, Input, Modal, Popconfirm, Row, Table } from "antd";
 import { useContext, useState } from "react";
 import RecentWorksBannerContext from "../context/RecentWorkBannerContext";
+import RecentWorkBannerEdit from "./RecentWorkBannerEdit";
 const RecentWorkBannerList = () => {
   //Modal for View
   const [isModalVisibleForView, setIsModalVisibleForView] = useState(false);
@@ -206,11 +207,11 @@ const RecentWorkBannerList = () => {
       </Modal>
 
       {/* Modal for Edit */}
-      {/* <RecentWorkEdit
+      <RecentWorkBannerEdit
         recentWork={selectedRecentWork}
         onCancel={handleEditCancel}
         visible={isModalVisibleForEdit}
-      /> */}
+      />
     </>
   );
 };
