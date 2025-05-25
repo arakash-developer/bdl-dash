@@ -110,11 +110,11 @@ const RecentWorkBannerForm = () => {
 
         <div className="col-span-2">
           {/* prioroty */}
-          <Form.Item name="priority" label="priority">
+          <Form.Item name="priority" label="Priority">
             <Input placeholder="Enter priority" type="number" />
           </Form.Item>
 
-          <Form.Item name="status" label="status">
+          <Form.Item name="status" label="Status">
             <Select placeholder="Enter status" name="status">
               <Select.Option value="active">Active</Select.Option>
               <Select.Option value="inactive">Inactive</Select.Option>
@@ -122,7 +122,7 @@ const RecentWorkBannerForm = () => {
           </Form.Item>
         </div>
 
-        <Form.Item className="col-span-2" name="series" label="Series">
+        <Form.Item className="col-span-2" name="series" label="Recent Work">
           <Select
             // mode="multiple"
             name="series"
