@@ -33,7 +33,7 @@ const RecentWorkBannerEdit = ({ recentWork, onCancel, visible }) => {
 
   const getAllSerise = async () => {
     try {
-      const res = await axios.get("/series");
+      const res = await axios.get("/recent-works");
       setSeries(res.data);
     } catch (error) {
       console.error(error.message);
@@ -58,12 +58,14 @@ const RecentWorkBannerEdit = ({ recentWork, onCancel, visible }) => {
 
       //   Populate existing files
       if (recentWork.image) {
-        setImage([{
-          uid: 0,
-          name: "Image 1",
-          status: "done",
-          url: `${import.meta.env.VITE_URL}${recentWork.image}`,
-        }]);
+        setImage([
+          {
+            uid: 0,
+            name: "Image 1",
+            status: "done",
+            url: `${import.meta.env.VITE_URL}${recentWork.image}`,
+          },
+        ]);
       }
     }
   }, [recentWork, form]);
@@ -145,7 +147,7 @@ const RecentWorkBannerEdit = ({ recentWork, onCancel, visible }) => {
               </Select>
             </Form.Item>
           </div>
-          {/* <Form.Item className="col-span-2" name="series" label="Series">
+          <Form.Item className="col-span-2" name="series" label="Series">
             <Select
               mode="multiple"
               name="series"
@@ -162,18 +164,18 @@ const RecentWorkBannerEdit = ({ recentWork, onCancel, visible }) => {
                   key={item._id}
                   value={item._id}
                 >
-                  <img
+                  {/* <img
                     className="inline-block mr-1 mb-1"
                     src={`${import.meta.env.VITE_URL}` + item.image}
                     width={20}
                     alt=""
-                  />
-                  <span className="inline-block">{item.name}</span>
+                  /> */}
+                  <span className="inline-block">{item.title}</span>
                 </Select.Option>
               ))}
             </Select>
           </Form.Item>
-      */}
+     
 
           {/* Images */}
           <Form.Item label="Images">
