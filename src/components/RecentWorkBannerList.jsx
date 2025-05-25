@@ -174,7 +174,7 @@ const RecentWorkBannerList = () => {
             </span>
           </p>
           <p className="font-semibold text-xl mb-4">
-            Project Name:
+            Recent Project Name:
             <span className="ml-1 capitalize text-green-500 text-2xl">
               {selectedRecentWork?.recentProjectName}
             </span>
