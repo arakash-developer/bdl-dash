@@ -8,7 +8,9 @@ const RecentWorkBannerList = () => {
   const [isModalVisibleForEdit, setIsModalVisibleForEdit] = useState(false);
   const [selectedRecentWork, setSelectedRecentWork] = useState(null);
   const [searchTerm, setSearchTerm] = useState(""); // State to store the search input
-  let { recentWorks,deleteRecentWorkBanner } = useContext(RecentWorksBannerContext);
+  let { recentWorks, deleteRecentWorkBanner } = useContext(
+    RecentWorksBannerContext
+  );
   const handleViewCancel = () => {
     setIsModalVisibleForView(false);
     setSelectedRecentWork(null);
@@ -17,16 +19,11 @@ const RecentWorkBannerList = () => {
   // Handle search input change
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
-    console.log(e.target.value);
   };
 
   // Filter recent works based on search term
-  const filteredRecentWorks = recentWorks.filter(
-    (work) =>
-      work.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      work.client.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (work.location &&
-        work.location.toLowerCase().includes(searchTerm.toLowerCase())) // Optional location filter
+  const filteredRecentWorks = recentWorks.filter((work) =>
+    work.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleView = (record) => {
@@ -147,8 +144,8 @@ const RecentWorkBannerList = () => {
       {/* Table */}
       <Table
         columns={columns}
-        // dataSource={filteredRecentWorks.sort((a, b) => a.prioroty - b.prioroty)}
-        dataSource={recentWorks}
+        dataSource={filteredRecentWorks.sort((a, b) => a.prioroty - b.prioroty)}
+        // dataSource={recentWorks}
         pagination={{ pageSize: 5 }}
         rowKey="_id"
       />
