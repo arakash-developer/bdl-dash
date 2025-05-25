@@ -132,13 +132,13 @@ const RecentWorkBannerForm = () => {
             }}
             className="col-span-2"
             placeholder="Please select"
+            onChange={(value) => setRecentWorkBanner(value)}
           >
             {series.map((item) => (
               <Select.Option
                 style={{ display: "flex", alignItems: "center" }}
                 key={item._id}
                 value={item._id}
-                onChange={(value) => setRecentWorkBanner(value)}
               >
                 <span className="inline-block">{item?.title}</span>
               </Select.Option>
