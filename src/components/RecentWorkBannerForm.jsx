@@ -50,9 +50,6 @@ const RecentWorkBannerForm = () => {
     const formData = new FormData();
 
     if (values.title) formData.append("title", values.title);
-    // if (values.client) formData.append("client", values.client);
-    // if (values.location) formData.append("location", values.location);
-    // if (values.description) formData.append("description", values.description);
     // if (values.priority) formData.append("priority", values.priority);
     // if (values.status) formData.append("status", values.status);
     if (recentWorkBanner) formData.append("recentWork", recentWorkBanner);
