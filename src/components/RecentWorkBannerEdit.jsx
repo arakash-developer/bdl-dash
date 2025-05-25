@@ -21,7 +21,9 @@ const uploadButton = (
   </div>
 );
 const RecentWorkBannerEdit = ({ recentWork, onCancel, visible }) => {
-  const { updateRecentWorkBanner, loading } = useContext(RecentWorksBannerContext);
+  const { updateRecentWorkBanner, loading } = useContext(
+    RecentWorksBannerContext
+  );
   console.log(recentWork);
   const [form] = Form.useForm();
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -54,29 +56,21 @@ const RecentWorkBannerEdit = ({ recentWork, onCancel, visible }) => {
         description: recentWork.description,
         client: recentWork.client,
         location: recentWork.location,
-        prioroty: recentWork.prioroty,
+        priority: recentWork.priority,
         status: recentWork.status,
         series: recentWork.series,
       });
 
       // Populate existing files
-      setImage(
-        recentWork.images.map((image, idx) => ({
-          uid: idx,
-          name: `Image ${idx + 1}`,
-          status: "done",
-          url: `${import.meta.env.VITE_URL}${image}`,
-        }))
-      );
+      //   setImage(
+      //     recentWork.images.map((image, idx) => ({
+      //       uid: idx,
+      //       name: `Image ${idx + 1}`,
+      //       status: "done",
+      //       url: `${import.meta.env.VITE_URL}${image}`,
+      //     }))
+      //   );
       // Populate existing videos
-      setVideo(
-        recentWork.videos.map((video, idx) => ({
-          uid: idx,
-          name: `Video ${idx + 1}`,
-          status: "done",
-          url: `${import.meta.env.VITE_URL}${video.video}`,
-        }))
-      );
     }
   }, [recentWork, form]);
 
@@ -84,36 +78,10 @@ const RecentWorkBannerEdit = ({ recentWork, onCancel, visible }) => {
     const formData = new FormData();
 
     if (values.title) formData.append("title", values.title);
-    // if (values.client) formData.append("client", values.client);
-    // if (values.location) formData.append("location", values.location);
-    // if (values.description) formData.append("description", values.description);
-    if (values.prioroty) formData.append("prioroty", values.prioroty);
+    if (values.priority) formData.append("priority", values.priority);
     // if (values.status) formData.append("status", values.status);
-    if (values.series)
-      values.series.forEach((s) => formData.append("series[]", s));
-
-    if (image.length > 0) {
-      for (let i = 0; i < image.length; i++) {
-        formData.append("image", image[i].originFileObj);
-      }
-    }
-
-    if (video.length > 0) {
-      for (let i = 0; i < video.length; i++) {
-        formData.append("video", video[i].originFileObj);
-      }
-    }
-
-    if (thumbnail.length > 0) {
-      formData.append("thumbnail", thumbnail[0].originFileObj);
-    }
-
-    imagesToDelete.forEach((image) =>
-      formData.append("imagesToDelete[]", image)
-    );
-    videosToDelete.forEach((video) =>
-      formData.append("videosToDelete[]", video)
-    );
+    console.log(values.priority);
+    
 
     const config = {
       onUploadProgress: (progressEvent) => {
@@ -126,7 +94,7 @@ const RecentWorkBannerEdit = ({ recentWork, onCancel, visible }) => {
     };
 
     try {
-      await updateRecentWork(recentWork._id, formData, config);
+      await updateRecentWorkBanner(recentWork._id, formData, config);
     } catch (error) {
       console.error(error);
       notification.error({
@@ -137,12 +105,7 @@ const RecentWorkBannerEdit = ({ recentWork, onCancel, visible }) => {
       });
     } finally {
       form.resetFields();
-      setImage([]);
-      setVideo([]);
-      setThumbnail([]);
       setImagesToDelete([]);
-      setVideosToDelete([]);
-
       setUploadProgress(0);
       onCancel();
     }
@@ -174,16 +137,8 @@ const RecentWorkBannerEdit = ({ recentWork, onCancel, visible }) => {
             <Form.Item name="title" label="Title">
               <Input name="title" placeholder="Enter title" />
             </Form.Item>
-            {/* Client */}
-            <Form.Item name="client" label="Client">
-              <Input placeholder="Enter client" />
-            </Form.Item>
-            {/* Location */}
-            <Form.Item name="location" label="Location">
-              <Input placeholder="Enter location" />
-            </Form.Item>
             {/* prioroty */}
-            <Form.Item name="prioroty" label="Prioroty">
+            <Form.Item name="priority" label="priority">
               <Input placeholder="Enter priority" type="number" />
             </Form.Item>
 
@@ -194,7 +149,7 @@ const RecentWorkBannerEdit = ({ recentWork, onCancel, visible }) => {
               </Select>
             </Form.Item>
           </div>
-          <Form.Item className="col-span-2" name="series" label="Series">
+          {/* <Form.Item className="col-span-2" name="series" label="Series">
             <Select
               mode="multiple"
               name="series"
@@ -222,13 +177,7 @@ const RecentWorkBannerEdit = ({ recentWork, onCancel, visible }) => {
               ))}
             </Select>
           </Form.Item>
-          {/* Description */}
-          <Form.Item name="description" label="Description">
-            <Input.TextArea
-              placeholder="Enter description"
-              autoSize={{ minRows: 3, maxRows: 6 }}
-            />
-          </Form.Item>
+      */}
 
           {/* Images */}
           <Form.Item label="Images">
@@ -244,33 +193,6 @@ const RecentWorkBannerEdit = ({ recentWork, onCancel, visible }) => {
               multiple
             >
               {uploadButton}
-            </Upload>
-          </Form.Item>
-
-          {/* Videos Upload */}
-          <Form.Item label="Videos">
-            <Upload
-              accept="video/*"
-              listType="picture-card"
-              fileList={video}
-              onChange={({ fileList }) => setVideo(fileList)}
-              onRemove={(file) =>
-                handleFileRemove(file, setVideo, setVideosToDelete)
-              }
-              beforeUpload={() => false} // Prevent automatic upload
-            >
-              {uploadButton}
-            </Upload>
-          </Form.Item>
-          <Form.Item label="Thumbnails">
-            <Upload
-              accept="image/*"
-              listType="picture-card"
-              fileList={thumbnail}
-              onChange={({ fileList }) => setThumbnail(fileList)}
-              beforeUpload={() => false} // Prevent automatic upload
-            >
-              {thumbnail.length == 1 ? null : uploadButton}
             </Upload>
           </Form.Item>
           {uploadProgress > 0 && (

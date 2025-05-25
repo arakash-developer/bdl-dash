@@ -43,7 +43,7 @@ export const RecentWorksBannerContextProvider = ({ children }) => {
    * @param {object} config - Request configuration object
    * @returns {Promise<void>}
    */
-  const createRecentWork = async (data, config) => {
+  const createRecentWorkBanner = async (data, config) => {
     setLoading(true);
     try {
       const response = await axios.post("/recent-works", data, config);
@@ -82,7 +82,7 @@ export const RecentWorksBannerContextProvider = ({ children }) => {
    * @returns {Promise} - A promise of the request.
    */
 
-  
+
   const deleteRecentWorkBanner = async (id) => {
     setLoading(true);
     try {
@@ -112,7 +112,7 @@ export const RecentWorksBannerContextProvider = ({ children }) => {
     try {
       const response = await axios.patch(`/recentWorkBanner/${id}`, data, config);
       if (response.status === 200) {
-        // getRecentWorks();
+        getRecentWorksBanner();
         notification.success({
           duration: 2,
           message: "Recent work updated successfully!",
@@ -136,7 +136,7 @@ export const RecentWorksBannerContextProvider = ({ children }) => {
       value={{
         recentWorks,
         setRecentWorks,
-        createRecentWork,
+        createRecentWorkBanner,
         updateRecentWorkBanner,
         deleteRecentWorkBanner,
         loading,
