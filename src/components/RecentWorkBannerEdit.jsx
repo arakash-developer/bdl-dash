@@ -30,6 +30,7 @@ const RecentWorkBannerEdit = ({ recentWork, onCancel, visible }) => {
   const [image, setImage] = useState([]); // New images
   const [imagesToDelete, setImagesToDelete] = useState([]); // Images to delete
   const [series, setSeries] = useState([]);
+  const [recentWorkBanner, setRecentWorkBanner] = useState();
 
   const getAllSerise = async () => {
     try {
@@ -75,12 +76,11 @@ const RecentWorkBannerEdit = ({ recentWork, onCancel, visible }) => {
 
     if (values.title) formData.append("title", values.title);
     if (values.priority) formData.append("priority", values.priority);
-    // if (values.status) formData.append("status", values.status);
-    // if (values.file) formData.append("file", values.file);
+    if (values.status) formData.append("status", values.status);
+    if (recentWorkBanner) formData.append("recentWork", recentWorkBanner);
     if (image.length > 0) {
       formData.append("image", image[0].originFileObj);
     }
-
     const config = {
       onUploadProgress: (progressEvent) => {
         const { loaded, total } = progressEvent;
@@ -149,14 +149,15 @@ const RecentWorkBannerEdit = ({ recentWork, onCancel, visible }) => {
           </div>
           <Form.Item className="col-span-2" name="series" label="Series">
             <Select
-              mode="multiple"
-              name="series"
+              //   mode="multiple"
+              name="recentWork"
               allowClear
               style={{
                 width: "100%",
               }}
               className="col-span-2"
               placeholder="Please select"
+              onChange={(value) => setRecentWorkBanner(value)}
             >
               {series.map((item) => (
                 <Select.Option
@@ -164,18 +165,11 @@ const RecentWorkBannerEdit = ({ recentWork, onCancel, visible }) => {
                   key={item._id}
                   value={item._id}
                 >
-                  {/* <img
-                    className="inline-block mr-1 mb-1"
-                    src={`${import.meta.env.VITE_URL}` + item.image}
-                    width={20}
-                    alt=""
-                  /> */}
-                  <span className="inline-block">{item.title}</span>
+                  <span className="inline-block">{item?.title}</span>
                 </Select.Option>
               ))}
             </Select>
           </Form.Item>
-     
 
           {/* Images */}
           <Form.Item label="Images">
