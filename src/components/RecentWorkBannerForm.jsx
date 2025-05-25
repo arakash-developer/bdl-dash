@@ -117,12 +117,7 @@ const RecentWorkBannerForm = () => {
         </div>
         {/* Title */}
 
-        {/* Description */}
-        <div className="col-span-2">
-          <Form.Item className="mb-2" name="description" label="Description">
-            <Input.TextArea placeholder="Enter description" />
-          </Form.Item>
-        </div>
+   
 
         {/* Image Upload */}
         <Form.Item
