@@ -1,5 +1,6 @@
 import { Button, Col, Image, Input, Modal, Popconfirm, Row, Table } from "antd";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import axios from "../axios";
 import RecentWorksBannerContext from "../context/RecentWorkBannerContext";
 import RecentWorkBannerEdit from "./RecentWorkBannerEdit";
 const RecentWorkBannerList = () => {
@@ -7,7 +8,8 @@ const RecentWorkBannerList = () => {
   const [isModalVisibleForView, setIsModalVisibleForView] = useState(false);
   const [isModalVisibleForEdit, setIsModalVisibleForEdit] = useState(false);
   const [selectedRecentWork, setSelectedRecentWork] = useState(null);
-  const [searchTerm, setSearchTerm] = useState(""); // State to store the search input
+  const [searchTerm, setSearchTerm] = useState("");
+  const [series, setSeries] = useState([]);
   let { recentWorks, deleteRecentWorkBanner } = useContext(
     RecentWorksBannerContext
   );
@@ -53,6 +55,11 @@ const RecentWorkBannerList = () => {
     {
       title: "Priority",
       dataIndex: "priority",
+      key: "prioroty",
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
       key: "prioroty",
     },
     {
@@ -175,20 +182,6 @@ const RecentWorkBannerList = () => {
         </div>
         <p style={{ fontWeight: "bold" }}>Images:</p>
         <Row gutter={[16, 16]}>
-          {/* {selectedRecentWork?.images.map((image, index) => (
-            <Col key={index}>
-              <Image.PreviewGroup>
-                <Image
-                  preview={true} // Disable default preview
-                  src={`${import.meta.env.VITE_URL}` + image}
-                  alt={`Image ${index + 1}`}
-                  style={{ width: "100%", height: 150, objectFit: "cover" }}
-                  lazy={true}
-                />
-              </Image.PreviewGroup>
-            </Col>
-          ))} */}
-
           <Col>
             <Image.PreviewGroup>
               <Image
