@@ -20,7 +20,7 @@ const uploadButton = (
     <div style={{ marginTop: 8 }}>Upload</div>
   </div>
 );
-const RecentWorkBannerEdit = ({ recentWork, onCancel, visible }) => {
+const RecentWorkBannerEdit = ({ recentWork, onCancel, visible ,recentProjectName}) => {
   const { updateRecentWorkBanner, loading } = useContext(
     RecentWorksBannerContext
   );
@@ -42,7 +42,7 @@ const RecentWorkBannerEdit = ({ recentWork, onCancel, visible }) => {
 
   useEffect(() => {
     getAllSerise();
-  }, []);
+  },[]);
 
   useEffect(() => {
     if (recentWork) {
@@ -154,7 +154,7 @@ const RecentWorkBannerEdit = ({ recentWork, onCancel, visible }) => {
               </Form.Item>
             </div>
           </div>
-          <Form.Item className="col-span-2" name="series" label="Series">
+          <Form.Item className="col-span-2" name="series" label="Recent Work">
             <Select
               //   mode="multiple"
               name=""
@@ -163,7 +163,7 @@ const RecentWorkBannerEdit = ({ recentWork, onCancel, visible }) => {
                 width: "100%",
               }}
               className="col-span-2"
-              placeholder="Please select"
+              placeholder={recentProjectName || "Select Recent Work"}  
               onChange={(value) => setRecentWorkBanner(value)}
             >
               {series.map((item) => (

@@ -1,6 +1,5 @@
 import { Button, Col, Image, Input, Modal, Popconfirm, Row, Table } from "antd";
-import { useContext, useEffect, useState } from "react";
-import axios from "../axios";
+import { useContext, useState } from "react";
 import RecentWorksBannerContext from "../context/RecentWorkBannerContext";
 import RecentWorkBannerEdit from "./RecentWorkBannerEdit";
 const RecentWorkBannerList = () => {
@@ -213,6 +212,9 @@ const RecentWorkBannerList = () => {
         recentWork={selectedRecentWork}
         onCancel={handleEditCancel}
         visible={isModalVisibleForEdit}
+        recentProjectName={
+          selectedRecentWork?.recentProjectName || "No Recent Project"
+        }
       />
     </>
   );
