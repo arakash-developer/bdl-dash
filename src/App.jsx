@@ -9,6 +9,7 @@ import { CustomerProvider } from "./context/CustomerContext";
 import { GreetingContextProvider } from "./context/GreetingContext";
 import MockupZoneContextProvider from "./context/MockupZoneContex";
 import ProductContextProvider from "./context/ProductContext";
+import { RecentWorksBannerContextProvider } from "./context/RecentWorkBannerContext";
 import { RecentWorksContextProvider } from "./context/RecentWorksContext";
 import ServicesContextProvider from "./context/ServicesContext";
 import SpecificationContextProvider from "./context/SpecificationContext";
@@ -38,7 +39,15 @@ function App() {
           {/* Wrap all the other routes inside the Layout */}
           <Route element={<Layout />}>
             <Route path="/" element={<Home />} />
-            <Route path="/recent-work-banner" element={<RecentWorkBanner />} />
+
+            <Route
+              path="/recent-work-banner"
+              element={
+                <RecentWorksBannerContextProvider>
+                  <RecentWorkBanner />
+                </RecentWorksBannerContextProvider>
+              }
+            />
             <Route
               path="/groups-series-subseries"
               element={<GroupSeriesSubSeriesPage />}

@@ -11,17 +11,17 @@ export const RecentWorksBannerContextProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    getRecentWorks();
+    getRecentWorksBanner();
   }, []);
 
   /**
    * Fetches recent works from the server
    * @returns {Promise<void>}
    */
-  const getRecentWorks = async () => {
+  const getRecentWorksBanner = async () => {
     setLoading(true);
     try {
-      const response = await axios.get("/recent-works");
+      const response = await axios.get("/recentWorkBanner");
       if (response.status === 200) {
         setLoading(false);
         setRecentWorks(response.data);
@@ -48,7 +48,7 @@ export const RecentWorksBannerContextProvider = ({ children }) => {
     try {
       const response = await axios.post("/recent-works", data, config);
       if (response.status === 201) {
-        getRecentWorks();
+        getRecentWorksBanner();
         notification.success({
           duration: 2,
           message: "Recent work created successfully!",
@@ -80,7 +80,7 @@ export const RecentWorksBannerContextProvider = ({ children }) => {
     try {
       const response = await axios.patch(`/recent-works/${id}`, data, config);
       if (response.status === 200) {
-        getRecentWorks();
+        getRecentWorksBanner();
         notification.success({
           duration: 2,
           message: "Recent work updated successfully!",
@@ -105,12 +105,12 @@ export const RecentWorksBannerContextProvider = ({ children }) => {
    * @param {string} id - The id of the recent work to delete.
    * @returns {Promise} - A promise of the request.
    */
-  const deleteRecentWork = async (id) => {
+  const deleteRecentWorkBanner = async (id) => {
     setLoading(true);
     try {
-      const response = await axios.delete(`/recent-works/${id}`);
+      const response = await axios.delete(`/recentWorkBanner/${id}`);
       if (response.status === 200) {
-        getRecentWorks();
+        getRecentWorksBanner();
         notification.success({
           duration: 2,
           message: "Recent work deleted successfully!",
@@ -136,7 +136,7 @@ export const RecentWorksBannerContextProvider = ({ children }) => {
         setRecentWorks,
         createRecentWork,
         updateRecentWork,
-        deleteRecentWork,
+        deleteRecentWorkBanner,
         loading,
       }}
     >
