@@ -182,7 +182,7 @@ const RecentWorkBannerEdit = ({ recentWork, onCancel, visible }) => {
                 handleFileRemove(file, setImage, setImagesToDelete)
               }
               beforeUpload={() => false} // Prevent automatic upload
-              multiple
+              // multiple
             >
               {uploadButton}
             </Upload>
