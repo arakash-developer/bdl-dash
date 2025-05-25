@@ -34,7 +34,6 @@ const RecentWorkBannerList = () => {
     console.log(record);
   };
   const handleDelete = (record) => {
-    // console.log(record);
     deleteRecentWorkBanner(record._id);
   };
 
