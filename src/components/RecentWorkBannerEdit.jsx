@@ -28,12 +28,7 @@ const RecentWorkBannerEdit = ({ recentWork, onCancel, visible }) => {
   const [form] = Form.useForm();
   const [uploadProgress, setUploadProgress] = useState(0);
   const [image, setImage] = useState([]); // New images
-  const [video, setVideo] = useState([]); // New videos
-  const [thumbnail, setThumbnail] = useState([]); // New thumbnail
-
   const [imagesToDelete, setImagesToDelete] = useState([]); // Images to delete
-  const [videosToDelete, setVideosToDelete] = useState([]); // Videos to delete
-
   const [series, setSeries] = useState([]);
 
   const getAllSerise = async () => {
@@ -61,16 +56,15 @@ const RecentWorkBannerEdit = ({ recentWork, onCancel, visible }) => {
         series: recentWork.series,
       });
 
-      // Populate existing files
-      //   setImage(
-      //     recentWork.images.map((image, idx) => ({
-      //       uid: idx,
-      //       name: `Image ${idx + 1}`,
-      //       status: "done",
-      //       url: `${import.meta.env.VITE_URL}${image}`,
-      //     }))
-      //   );
-      // Populate existing videos
+      //   Populate existing files
+      if (recentWork.image) {
+        setImage([{
+          uid: 0,
+          name: "Image 1",
+          status: "done",
+          url: `${import.meta.env.VITE_URL}${recentWork.image}`,
+        }]);
+      }
     }
   }, [recentWork, form]);
 
@@ -80,8 +74,10 @@ const RecentWorkBannerEdit = ({ recentWork, onCancel, visible }) => {
     if (values.title) formData.append("title", values.title);
     if (values.priority) formData.append("priority", values.priority);
     // if (values.status) formData.append("status", values.status);
-    console.log(values.priority);
-    
+    // if (values.file) formData.append("file", values.file);
+    if (image.length > 0) {
+      formData.append("image", image[0].originFileObj);
+    }
 
     const config = {
       onUploadProgress: (progressEvent) => {
