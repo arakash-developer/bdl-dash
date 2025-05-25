@@ -20,14 +20,15 @@ const uploadButton = (
 );
 const RecentWorkBannerForm = () => {
   const [form] = Form.useForm();
-  const { createRecentWork } = useContext(RecentWorksBannerContext);
+  const { createRecentWorkBanner } = useContext(RecentWorksBannerContext);
   const [series, setSeries] = useState([]);
   const [uploadProgress, setUploadProgress] = useState(0); // State for progress
   const [images, setImages] = useState([]);
+  const [recentWorkBanner, setRecentWorkBanner] = useState();
 
   const getAllSerise = async () => {
     try {
-      const res = await axios.get("/series");
+      const res = await axios.get("/recent-works");
       setSeries(res.data);
     } catch (error) {
       console.error(error.message);
@@ -49,9 +50,12 @@ const RecentWorkBannerForm = () => {
     const formData = new FormData();
 
     if (values.title) formData.append("title", values.title);
-    if (values.client) formData.append("client", values.client);
-    if (values.location) formData.append("location", values.location);
-    if (values.description) formData.append("description", values.description);
+    // if (values.client) formData.append("client", values.client);
+    // if (values.location) formData.append("location", values.location);
+    // if (values.description) formData.append("description", values.description);
+    // if (values.priority) formData.append("priority", values.priority);
+    // if (values.status) formData.append("status", values.status);
+    if (recentWorkBanner) formData.append("recentWork", recentWorkBanner);
 
     if (images.length > 0) {
       images.forEach((image) => {
@@ -59,9 +63,7 @@ const RecentWorkBannerForm = () => {
       });
     }
 
-    if (values.series) {
-      values.series.forEach((serise) => formData.append("series[]", serise));
-    }
+
 
     // Set up the config to track the progress
     const config = {
@@ -75,7 +77,7 @@ const RecentWorkBannerForm = () => {
 
     // Submit the form data to the server
     try {
-      await createRecentWork(formData, config);
+      await createRecentWorkBanner(formData, config);
     } catch (error) {
       console.error(error.message);
       notification.error({
@@ -129,14 +131,9 @@ const RecentWorkBannerForm = () => {
                 style={{ display: "flex", alignItems: "center" }}
                 key={item._id}
                 value={item._id}
+                onChange={(value) => setRecentWorkBanner(value)}
               >
-                <img
-                  className="inline-block mr-1 mb-1"
-                  src={`${import.meta.env.VITE_URL}` + item.image}
-                  width={20}
-                  alt=""
-                />
-                <span className="inline-block">{item.name}</span>
+                <span className="inline-block">{item?.title}</span>
               </Select.Option>
             ))}
           </Select>
