@@ -75,36 +75,14 @@ export const RecentWorksBannerContextProvider = ({ children }) => {
    * @param {object} config - Request configuration object.
    * @returns {Promise} - A promise of the request.
    */
-  // const updateRecentWork = async (id, data, config) => {
-  //   setLoading(true);
-  //   try {
-  //     const response = await axios.patch(`/recent-works/${id}`, data, config);
-  //     if (response.status === 200) {
-  //       getRecentWorksBanner();
-  //       notification.success({
-  //         duration: 2,
-  //         message: "Recent work updated successfully!",
-  //       });
-  //     }
-  //   } catch (error) {
-  //     console.error(error.message);
-  //     notification.error({
-  //       message: error.response.data.message
-  //         ? error.response.data.message
-  //         : error.message,
-  //       duration: 2,
-  //     });
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   /**
    * Deletes a recent work.
    * Makes a DELETE request to the server to delete a recent work.
    * @param {string} id - The id of the recent work to delete.
    * @returns {Promise} - A promise of the request.
    */
+
+  
   const deleteRecentWorkBanner = async (id) => {
     setLoading(true);
     try {
