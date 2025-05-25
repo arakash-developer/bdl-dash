@@ -119,7 +119,7 @@ const RecentWorkBannerForm = () => {
 
         <Form.Item className="col-span-2" name="series" label="Series">
           <Select
-            mode="multiple"
+            // mode="multiple"
             name="series"
             allowClear
             style={{
@@ -162,7 +162,7 @@ const RecentWorkBannerForm = () => {
             fileList={images}
             onChange={handleImageChange}
             beforeUpload={() => false} // Prevent automatic upload
-            multiple // Allow multiple image uploads
+            // multiple // Allow multiple image uploads
           >
             {images.length >= 40 ? null : uploadButton}
           </Upload>
