@@ -21,11 +21,11 @@ import GroupSeriesSubSeriesPage from "./pages/GroupSeriesSubSeriesPage";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import MockupZone from "./pages/MockupZone";
+import RecentWorkBanner from "./pages/RecentWorkBanner";
 import RecentWorks from "./pages/RecentWorks";
 import Services from "./pages/Services";
 import Specification from "./pages/Specification";
 import UserManagement from "./pages/UserManagement";
-import RecentWorkBanner from "./pages/RecentWorkBanner";
 
 function App() {
   return (
@@ -37,8 +37,8 @@ function App() {
 
           {/* Wrap all the other routes inside the Layout */}
           <Route element={<Layout />}>
-          <Route path="/recent-work-banner" element={<RecentWorkBanner />} />
             <Route path="/" element={<Home />} />
+            <Route path="/recent-work-banner" element={<RecentWorkBanner />} />
             <Route
               path="/groups-series-subseries"
               element={<GroupSeriesSubSeriesPage />}
