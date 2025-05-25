@@ -129,22 +129,26 @@ const RecentWorkBannerEdit = ({ recentWork, onCancel, visible }) => {
         style={{ top: 20 }}
       >
         <Form form={form} layout="vertical" onFinish={handleUpdate}>
-          <div className="flex justify-between">
+          <div className="flex justify-between gap-x-3">
             {/* Title */}
-            <Form.Item name="title" label="Title">
-              <Input name="title" placeholder="Enter title" />
-            </Form.Item>
-            {/* prioroty */}
-            <Form.Item name="priority" label="priority">
-              <Input placeholder="Enter priority" type="number" />
-            </Form.Item>
-
-            <Form.Item name="status" label="status">
-              <Select placeholder="Enter status" name="status">
-                <Select.Option value="active">Active</Select.Option>
-                <Select.Option value="inactive">Inactive</Select.Option>
-              </Select>
-            </Form.Item>
+            <div className="w-1/2">
+              <Form.Item name="title" label="Title">
+                <Input name="title" placeholder="Enter title" />
+              </Form.Item>
+            </div>
+            <div className="w-1/2">
+              <Form.Item name="priority" label="priority">
+                <Input placeholder="Enter priority" type="number" />
+              </Form.Item>
+            </div>
+            <div className="w-1/2">
+              <Form.Item name="status" label="status">
+                <Select placeholder="Enter status" name="status">
+                  <Select.Option value="active">Active</Select.Option>
+                  <Select.Option value="inactive">Inactive</Select.Option>
+                </Select>
+              </Form.Item>
+            </div>
           </div>
           <Form.Item className="col-span-2" name="series" label="Series">
             <Select
