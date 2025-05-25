@@ -25,6 +25,7 @@ import RecentWorks from "./pages/RecentWorks";
 import Services from "./pages/Services";
 import Specification from "./pages/Specification";
 import UserManagement from "./pages/UserManagement";
+import RecentWorkBanner from "./pages/RecentWorkBanner";
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
 
           {/* Wrap all the other routes inside the Layout */}
           <Route element={<Layout />}>
+          <Route path="/recent-work-banner" element={<RecentWorkBanner />} />
             <Route path="/" element={<Home />} />
             <Route
               path="/groups-series-subseries"
