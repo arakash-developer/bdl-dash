@@ -72,11 +72,15 @@ const RecentWorkBannerEdit = ({ recentWork, onCancel, visible }) => {
 
   const handleUpdate = async (values) => {
     const formData = new FormData();
+    let a = series.filter((s) => s._id === recentWorkBanner);
+    let recentProjectName = a[0]?.title;
 
     if (values.title) formData.append("title", values.title);
     if (values.priority) formData.append("priority", values.priority);
     if (values.status) formData.append("status", values.status);
     if (recentWorkBanner) formData.append("recentWork", recentWorkBanner);
+    if (recentProjectName)
+      formData.append("recentProjectName", recentProjectName);
     if (image.length > 0) {
       formData.append("image", image[0].originFileObj);
     }
@@ -153,7 +157,7 @@ const RecentWorkBannerEdit = ({ recentWork, onCancel, visible }) => {
           <Form.Item className="col-span-2" name="series" label="Series">
             <Select
               //   mode="multiple"
-              name="recentWork"
+              name=""
               allowClear
               style={{
                 width: "100%",
