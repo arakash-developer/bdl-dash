@@ -71,7 +71,7 @@ const RecentWorkBannerList = () => {
             <Image
               key={image}
               src={`${import.meta.env.VITE_URL}` + image}
-              alt={image}
+              alt={"Not Found"}
               style={{
                 width: 100,
                 height: 100,
