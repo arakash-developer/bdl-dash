@@ -50,13 +50,14 @@ const RecentWorkBannerForm = () => {
   const onFinish = async (values) => {
     const formData = new FormData();
     let a = series.filter((s) => s._id === recentWorkBanner);
-    let recentProjectName = a[0]?.title
+    let recentProjectName = a[0]?.title;
 
     if (values.title) formData.append("title", values.title);
     if (values.priority) formData.append("priority", values.priority);
     if (values.status) formData.append("status", values.status);
     if (recentWorkBanner) formData.append("recentWork", recentWorkBanner);
-    if (recentProjectName) formData.append("recentProjectName", recentProjectName);
+    if (recentProjectName)
+      formData.append("recentProjectName", recentProjectName);
 
     if (images.length > 0) {
       images.forEach((image) => {
@@ -171,7 +172,6 @@ const RecentWorkBannerForm = () => {
             {images.length >= 40 ? null : uploadButton}
           </Upload>
         </Form.Item>
-
         {uploadProgress > 0 && (
           <Progress
             className="col-span-2"
@@ -188,6 +188,7 @@ const RecentWorkBannerForm = () => {
           />
         )}
 
+        <p>Only One Image Allowed</p>
         {/* Submit Button */}
         <div className="col-span-2 mt-3">
           <Button type="primary" htmlType="submit" className="w-full">
