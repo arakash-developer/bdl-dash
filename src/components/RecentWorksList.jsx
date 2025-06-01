@@ -164,6 +164,12 @@ const RecentWorksList = () => {
             </span>
           </p>
           <p className="font-semibold text-xl mb-4">
+            ProjectId:
+            <span className="text-green-500 text-2xl">
+              {selectedRecentWork?.projectId}
+            </span>
+          </p>
+          <p className="font-semibold text-xl mb-4">
             Client:
             <span className="text-green-500 text-2xl">
               {selectedRecentWork?.client}
