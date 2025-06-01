@@ -57,6 +57,7 @@ const RecentWorkEdit = ({ recentWork, onCancel, visible }) => {
         prioroty: recentWork.prioroty,
         status: recentWork.status,
         series: recentWork.series,
+        projectId: recentWork.projectId,
       });
 
       // Populate existing files
@@ -89,6 +90,7 @@ const RecentWorkEdit = ({ recentWork, onCancel, visible }) => {
     if (values.description) formData.append("description", values.description);
     if (values.prioroty) formData.append("prioroty", values.prioroty);
     if (values.status) formData.append("status", values.status);
+    if (values.projectId) formData.append("projectId", values.projectId);
     if (values.series)
       values.series.forEach((s) => formData.append("series[]", s));
 
@@ -173,6 +175,9 @@ const RecentWorkEdit = ({ recentWork, onCancel, visible }) => {
             {/* Title */}
             <Form.Item name="title" label="Title">
               <Input name="title" placeholder="Enter title" />
+            </Form.Item>
+            <Form.Item name="projectId" label="projectId">
+              <Input name="projectId" placeholder="Enter projectId" />
             </Form.Item>
             {/* Client */}
             <Form.Item name="client" label="Client">

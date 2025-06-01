@@ -56,6 +56,7 @@ const RecentWorkCreateForm = () => {
     if (values.client) formData.append("client", values.client);
     if (values.location) formData.append("location", values.location);
     if (values.description) formData.append("description", values.description);
+    if (values.projectId) formData.append("projectId", values.projectId);
 
     if (images.length > 0) {
       images.forEach((image) => {
@@ -116,6 +117,14 @@ const RecentWorkCreateForm = () => {
             className="mb-2"
             name="title"
             label="Title"
+            rules={[{ required: true, message: "Please input the title!" }]}
+          >
+            <Input placeholder="Enter title" />
+          </Form.Item>
+          <Form.Item
+            className="mb-2"
+            name="projectId"
+            label="projectId"
             rules={[{ required: true, message: "Please input the title!" }]}
           >
             <Input placeholder="Enter title" />
