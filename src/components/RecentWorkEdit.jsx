@@ -176,8 +176,8 @@ const RecentWorkEdit = ({ recentWork, onCancel, visible }) => {
             <Form.Item name="title" label="Title">
               <Input name="title" placeholder="Enter title" />
             </Form.Item>
-            <Form.Item name="projectId" label="projectId">
-              <Input name="projectId" placeholder="Enter projectId" />
+            <Form.Item name="projectId" label="Project Name">
+              <Input name="projectId" placeholder="Enter project name" />
             </Form.Item>
             {/* Client */}
             <Form.Item name="client" label="Client">

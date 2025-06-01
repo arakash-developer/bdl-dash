@@ -163,13 +163,13 @@ const RecentWorksList = () => {
             </span>
           </p>
           <p className="font-semibold text-xl mb-4">
-            Project Name:
+            Project Title:
             <span className="text-green-500 text-2xl">
               {selectedRecentWork?.title}
             </span>
           </p>
           <p className="font-semibold text-xl mb-4">
-            ProjectId:
+            Project Name:
             <span className="text-green-500 text-2xl">
               {selectedRecentWork?.projectId}
             </span>
