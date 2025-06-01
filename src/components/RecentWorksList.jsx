@@ -54,9 +54,14 @@ const RecentWorksList = () => {
 
   const columns = [
     {
-      title: "Project Name",
+      title: "Project Title",
       dataIndex: "title",
       key: "title",
+    },
+    {
+      title: "Project Name",
+      dataIndex: "projectId",
+      key: "projectId",
     },
     {
       title: "Client",

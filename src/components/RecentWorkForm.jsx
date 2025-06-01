@@ -124,8 +124,8 @@ const RecentWorkCreateForm = () => {
           <Form.Item
             className="mb-2"
             name="projectId"
-            label="projectId"
-            rules={[{ required: true, message: "Please input the title!" }]}
+            label="Project Name"
+            rules={[{ required: true, message: "Please input the project name!" }]}
           >
             <Input placeholder="Enter title" />
           </Form.Item>
