@@ -22,7 +22,7 @@ const RecentWorkBannerForm = () => {
   const [form] = Form.useForm();
   const { createRecentWorkBanner } = useContext(RecentWorksBannerContext);
   const [series, setSeries] = useState([]);
-  const [uploadProgress, setUploadProgress] = useState(0); // State for progress
+  const [uploadProgress, setUploadProgress] = useState(0);
   const [images, setImages] = useState([]);
   const [recentWorkBanner, setRecentWorkBanner] = useState();
   const [recentWorkBannerName, setRecentWorkBannerName] = useState();
@@ -38,14 +38,15 @@ const RecentWorkBannerForm = () => {
 
   useEffect(() => {
     getAllSerise();
-  }, []);
+    // Set default values
+    form.setFieldsValue({
+      status: "active",
+      priority: 1,
+    });
+  }, [form]);
 
   const handleImageChange = ({ fileList: newImagesFileList }) =>
     setImages(newImagesFileList);
-  const handleVideoChange = ({ fileList: newVideoFileList }) =>
-    setVideos(newVideoFileList);
-  const handleThumbnailChange = ({ fileList: newThumbnailFileList }) =>
-    setThumbnail(newThumbnailFileList);
 
   const onFinish = async (values) => {
     const formData = new FormData();
@@ -99,6 +100,10 @@ const RecentWorkBannerForm = () => {
         form={form}
         layout="vertical"
         onFinish={onFinish}
+        initialValues={{
+          status: "active",
+          priority: 1,
+        }}
         className="grid grid-cols-2 gap-6"
       >
         <div className="col-span-2">
@@ -115,11 +120,11 @@ const RecentWorkBannerForm = () => {
 
         <div className="col-span-2">
           {/* prioroty */}
-          <Form.Item name="priority" label="Priority">
+          <Form.Item name="priority" label="Priority" initialValue={1}>
             <Input placeholder="Enter priority" type="number" />
           </Form.Item>
 
-          <Form.Item name="status" label="Status">
+          <Form.Item name="status" label="Status" initialValue="active">
             <Select placeholder="Enter status" name="status">
               <Select.Option value="active">Active</Select.Option>
               <Select.Option value="inactive">Inactive</Select.Option>
@@ -166,10 +171,10 @@ const RecentWorkBannerForm = () => {
             listType="picture-card"
             fileList={images}
             onChange={handleImageChange}
-            beforeUpload={() => false} // Prevent automatic upload
-            // multiple // Allow multiple image uploads
+            beforeUpload={() => false}
+            maxCount={1}
           >
-            {images.length >= 40 ? null : uploadButton}
+            {images.length < 1 && uploadButton}
           </Upload>
         </Form.Item>
         {uploadProgress > 0 && (
@@ -188,7 +193,6 @@ const RecentWorkBannerForm = () => {
           />
         )}
 
-        <p>Only One Image Allowed</p>
         {/* Submit Button */}
         <div className="col-span-2 mt-3">
           <Button type="primary" htmlType="submit" className="w-full">
