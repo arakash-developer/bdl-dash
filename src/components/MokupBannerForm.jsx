@@ -10,7 +10,7 @@ import {
 } from "antd";
 import { useContext, useEffect, useState } from "react";
 import axios from "../axios";
-import RecentWorksBannerContext from "../context/RecentWorkBannerContext";
+import MokupBannerContext from "../context/MokupBannerContex";
 
 const uploadButton = (
   <div>
@@ -20,76 +20,84 @@ const uploadButton = (
 );
 const MokupBannerForm = () => {
   const [form] = Form.useForm();
-  const { createRecentWorkBanner } = useContext(RecentWorksBannerContext);
-  const [series, setSeries] = useState([]);
-  const [uploadProgress, setUploadProgress] = useState(0); // State for progress
+  const { createMokupBanner, mokupBanner } = useContext(MokupBannerContext);
+  const [zones, setZones] = useState([]);
+  const [uploadProgress, setUploadProgress] = useState(0);
   const [images, setImages] = useState([]);
-  const [recentWorkBanner, setRecentWorkBanner] = useState();
-  const [recentWorkBannerName, setRecentWorkBannerName] = useState();
 
-  const getAllSerise = async () => {
+  const getAllZones = async () => {
     try {
-      const res = await axios.get("/recent-works");
-      setSeries(res.data);
+      const res = await axios.get("/mockup-zones");
+      setZones(res.data);
     } catch (error) {
       console.error(error.message);
     }
   };
 
   useEffect(() => {
-    getAllSerise();
+    getAllZones();
   }, []);
 
   const handleImageChange = ({ fileList: newImagesFileList }) =>
     setImages(newImagesFileList);
-  const handleVideoChange = ({ fileList: newVideoFileList }) =>
-    setVideos(newVideoFileList);
-  const handleThumbnailChange = ({ fileList: newThumbnailFileList }) =>
-    setThumbnail(newThumbnailFileList);
+
+  const checkExistingBanner = (zoneName) => {
+    return mokupBanner.some((banner) => banner.mokupzone === zoneName);
+  };
 
   const onFinish = async (values) => {
     const formData = new FormData();
-    let a = series.filter((s) => s._id === recentWorkBanner);
-    let recentProjectName = a[0]?.title;
+    const selectedZone = zones.find((z) => z._id === values.zone);
 
-    if (values.title) formData.append("title", values.title);
-    if (values.priority) formData.append("priority", values.priority);
-    if (values.status) formData.append("status", values.status);
-    if (recentWorkBanner) formData.append("recentWork", recentWorkBanner);
-    if (recentProjectName)
-      formData.append("recentProjectName", recentProjectName);
-
-    if (images.length > 0) {
-      images.forEach((image) => {
-        formData.append("image", image.originFileObj);
+    if (selectedZone && checkExistingBanner(selectedZone.name)) {
+      notification.warning({
+        message: "Banner already exists",
+        description: `A banner for ${selectedZone.name} already exists. Please choose a different zone.`,
+        duration: 3,
       });
+      return;
     }
 
-    // Set up the config to track the progress
+    formData.append("title", values.title || "untitled banner");
+    formData.append("priority", values.priority || 1);
+    formData.append("status", values.status || "active");
+    if (selectedZone) {
+      formData.append("mokupzone", selectedZone.name);
+      formData.append("projectName", selectedZone.title || null);
+    }
+    if (images.length > 0) {
+      formData.append("image", images[0].originFileObj);
+    }
+
+    // Debug log
+    console.log("Form Data:", Object.fromEntries(formData));
+
     const config = {
+      headers: { "Content-Type": "multipart/form-data" },
       onUploadProgress: (progressEvent) => {
         const percentCompleted = Math.round(
           (progressEvent.loaded * 100) / progressEvent.total
         );
-        setUploadProgress(percentCompleted); // Update the progress
+        setUploadProgress(percentCompleted);
       },
     };
 
-    // Submit the form data to the server
     try {
-      await createRecentWorkBanner(formData, config);
+      await createMokupBanner(formData, config);
+      notification.success({
+        message: "Banner created successfully",
+        duration: 2,
+      });
+      form.resetFields();
+      setImages([]);
     } catch (error) {
-      console.error(error.message);
+      console.error("Submission error:", error.response?.data);
       notification.error({
-        message: error.response.data.message
-          ? error.response.data.message
-          : error.message,
+        message: "Failed to create banner. Please check console for details.",
         duration: 2,
       });
     } finally {
       setUploadProgress(0);
-      form.resetFields();
-      setImages([]);
     }
   };
 
@@ -99,6 +107,10 @@ const MokupBannerForm = () => {
         form={form}
         layout="vertical"
         onFinish={onFinish}
+        initialValues={{
+          status: "active",
+          priority: 1,
+        }}
         className="grid grid-cols-2 gap-6"
       >
         <div className="col-span-2">
@@ -115,11 +127,11 @@ const MokupBannerForm = () => {
 
         <div className="col-span-2">
           {/* prioroty */}
-          <Form.Item name="priority" label="Priority">
+          <Form.Item name="priority" label="Priority" initialValue={1}>
             <Input placeholder="Enter priority" type="number" />
           </Form.Item>
 
-          <Form.Item name="status" label="Status">
+          <Form.Item name="status" label="Status" initialValue="active">
             <Select placeholder="Enter status" name="status">
               <Select.Option value="active">Active</Select.Option>
               <Select.Option value="inactive">Inactive</Select.Option>
@@ -127,25 +139,21 @@ const MokupBannerForm = () => {
           </Form.Item>
         </div>
 
-        <Form.Item className="col-span-2" name="series" label="Recent Work">
+        <Form.Item
+          className="col-span-2"
+          name="zone"
+          label="Zone"
+          rules={[{ required: true, message: "Please select a zone!" }]}
+        >
           <Select
-            // mode="multiple"
-            name="series"
+            name="zone"
             allowClear
-            style={{
-              width: "100%",
-            }}
-            className="col-span-2"
-            placeholder="Please select"
-            onChange={(value) => setRecentWorkBanner(value)}
+            style={{ width: "100%" }}
+            placeholder="Please select zone"
           >
-            {series.map((item) => (
-              <Select.Option
-                style={{ display: "flex", alignItems: "center" }}
-                key={item._id}
-                value={item._id}
-              >
-                <span className="inline-block">{item?.title}</span>
+            {zones.map((zone) => (
+              <Select.Option key={zone._id} value={zone._id}>
+                {zone.name}
               </Select.Option>
             ))}
           </Select>
@@ -156,9 +164,7 @@ const MokupBannerForm = () => {
           className="mb-2 col-span-2"
           label="Upload Images"
           name="image"
-          rules={[
-            { required: true, message: "Please upload at least one image!" },
-          ]}
+          rules={[{ required: true, message: "Please upload an image!" }]}
         >
           <Upload
             accept="image/*"
@@ -167,9 +173,9 @@ const MokupBannerForm = () => {
             fileList={images}
             onChange={handleImageChange}
             beforeUpload={() => false} // Prevent automatic upload
-            // multiple // Allow multiple image uploads
+            maxCount={1}
           >
-            {images.length >= 40 ? null : uploadButton}
+            {images.length >= 1 ? null : uploadButton}
           </Upload>
         </Form.Item>
         {uploadProgress > 0 && (
@@ -188,7 +194,6 @@ const MokupBannerForm = () => {
           />
         )}
 
-        <p>Only One Image Allowed</p>
         {/* Submit Button */}
         <div className="col-span-2 mt-3">
           <Button type="primary" htmlType="submit" className="w-full">

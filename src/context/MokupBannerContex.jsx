@@ -22,18 +22,16 @@ export const MokupBannerContextProvider = ({ children }) => {
     setLoading(true);
     try {
       const response = await axios.get("/mokupzone-banner");
-      if (response.status === 200) {
-        setLoading(false);
-        setMokupBanner(response.data);
-      }
+      setMokupBanner(response.data);
     } catch (error) {
-      console.error(error.message);
+      console.error("Get banner error:", error.response?.data || error.message);
       notification.error({
-        message: error.response.data.message
-          ? error.response.data.message
-          : error.message,
+        message: "Failed to fetch banners",
+        description: error.response?.data?.message || error.message,
         duration: 2,
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -43,38 +41,46 @@ export const MokupBannerContextProvider = ({ children }) => {
    * @param {object} config - Request configuration object
    * @returns {Promise<void>}
    */
-  const createRecentWorkBanner = async (data, config) => {
+  const createMokupBanner = async (data, config) => {
     setLoading(true);
     try {
-      const response = await axios.post("/recentWorkBanner", data, config);
-      if (response.status === 201) {
-        getRecentWorksBanner();
+      // Log the FormData contents for debugging
+      for (let pair of data.entries()) {
+        console.log(pair[0], pair[1]);
+      }
+
+      const response = await axios.post("/mokupzone-banner", data, {
+        ...config,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (response.status === 201 || response.status === 200) {
+        await getRecentWorksBanner();
         notification.success({
+          message: "Banner created successfully!",
           duration: 2,
-          message: "Recent work created successfully!",
         });
+        return response;
       }
     } catch (error) {
-      console.error(error.message);
+      console.error("Create banner error details:", {
+        data: Object.fromEntries(data),
+        error: error.response?.data || error.message,
+      });
       notification.error({
-        message: error.response.data.message
-          ? error.response.data.message
-          : error.message,
+        message: "Failed to create banner",
+        description:
+          error.response?.data?.message || "Please check all required fields",
         duration: 2,
       });
+      throw error;
     } finally {
       setLoading(false);
     }
   };
 
-  /**
-   * Updates a recent work
-   * Makes a PATCH request to the server to update a recent work.
-   * @param {string} id - The id of the recent work to update.
-   * @param {object} data - Object with the new recent work data.
-   * @param {object} config - Request configuration object.
-   * @returns {Promise} - A promise of the request.
-   */
   /**
    * Deletes a recent work.
    * Makes a DELETE request to the server to delete a recent work.
@@ -82,24 +88,25 @@ export const MokupBannerContextProvider = ({ children }) => {
    * @returns {Promise} - A promise of the request.
    */
 
-
   const deleteRecentWorkBanner = async (id) => {
     setLoading(true);
     try {
-      const response = await axios.delete(`/recentWorkBanner/${id}`);
+      const response = await axios.delete(`/mokupzone-banner/${id}`);
       if (response.status === 200) {
-        getRecentWorksBanner();
+        await getRecentWorksBanner();
         notification.success({
+          message: "Banner deleted successfully!",
           duration: 2,
-          message: "Recent work deleted successfully!",
         });
       }
     } catch (error) {
-      console.error(error.message);
+      console.error(
+        "Delete banner error:",
+        error.response?.data || error.message
+      );
       notification.error({
-        message: error.response.data.message
-          ? error.response.data.message
-          : error.message,
+        message: "Failed to delete banner",
+        description: error.response?.data?.message || error.message,
         duration: 2,
       });
     } finally {
@@ -110,20 +117,26 @@ export const MokupBannerContextProvider = ({ children }) => {
   const updateRecentWorkBanner = async (id, data, config) => {
     setLoading(true);
     try {
-      const response = await axios.patch(`/recentWorkBanner/${id}`, data, config);
+      const response = await axios.patch(
+        `/mokupzone-banner/${id}`,
+        data,
+        config
+      );
       if (response.status === 200) {
-        getRecentWorksBanner();
+        await getRecentWorksBanner();
         notification.success({
+          message: "Banner updated successfully!",
           duration: 2,
-          message: "Recent work updated successfully!",
         });
       }
     } catch (error) {
-      console.error(error.message);
+      console.error(
+        "Update banner error:",
+        error.response?.data || error.message
+      );
       notification.error({
-        message: error.response.data.message
-          ? error.response.data.message
-          : error.message,
+        message: "Failed to update banner",
+        description: error.response?.data?.message || error.message,
         duration: 2,
       });
     } finally {
@@ -136,7 +149,7 @@ export const MokupBannerContextProvider = ({ children }) => {
       value={{
         mokupBanner,
         setMokupBanner,
-        createRecentWorkBanner,
+        createMokupBanner,
         updateRecentWorkBanner,
         deleteRecentWorkBanner,
         loading,
