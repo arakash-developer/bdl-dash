@@ -7,7 +7,7 @@ import axios from "../axios";
 export const MokupBannerContext = createContext();
 
 export const MokupBannerContextProvider = ({ children }) => {
-  const [recentWorks, setRecentWorks] = useState([]);
+  const [mokupBanner, setMokupBanner] = useState([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -24,7 +24,7 @@ export const MokupBannerContextProvider = ({ children }) => {
       const response = await axios.get("/mokupzone-banner");
       if (response.status === 200) {
         setLoading(false);
-        setRecentWorks(response.data);
+        setMokupBanner(response.data);
       }
     } catch (error) {
       console.error(error.message);
@@ -134,8 +134,8 @@ export const MokupBannerContextProvider = ({ children }) => {
   return (
     <MokupBannerContext.Provider
       value={{
-        recentWorks,
-        setRecentWorks,
+        mokupBanner,
+        setMokupBanner,
         createRecentWorkBanner,
         updateRecentWorkBanner,
         deleteRecentWorkBanner,
