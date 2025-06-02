@@ -104,6 +104,19 @@ const Sidebar = () => {
           </li>
           <li>
             <NavLink
+              to="/mokup-banner"
+              end
+              className={({ isActive }) =>
+                `block py-2.5 px-4 rounded transition duration-200 ${
+                  isActive ? "bg-gray-700" : "hover:bg-gray-700"
+                }`
+              }
+            >
+              Mokup Banner
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
               to="/groups-series-subseries"
               end
               className={({ isActive }) =>

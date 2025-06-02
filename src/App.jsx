@@ -2,12 +2,14 @@ import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import Layout from "./components/Layout";
 import Products from "./pages/Products";
 
+import MokupBanner from "./components/MokupBanner";
 import AcademyContextProvider from "./context/AcademyContext";
 import AuthContextProvider from "./context/AuthContext";
 import CompanyProfileContextProvider from "./context/CompanyProfileContext";
 import { CustomerProvider } from "./context/CustomerContext";
 import { GreetingContextProvider } from "./context/GreetingContext";
 import MockupZoneContextProvider from "./context/MockupZoneContex";
+import { MokupBannerProvider } from "./context/MokupBannerContext";
 import ProductContextProvider from "./context/ProductContext";
 import { RecentWorksBannerContextProvider } from "./context/RecentWorkBannerContext";
 import { RecentWorksContextProvider } from "./context/RecentWorksContext";
@@ -125,6 +127,14 @@ function App() {
                 <CustomerProvider>
                   <Customers />
                 </CustomerProvider>
+              }
+            />
+            <Route
+              path="/mokup-banner"
+              element={
+                <MokupBannerProvider>
+                  <MokupBanner />
+                </MokupBannerProvider>
               }
             />
           </Route>

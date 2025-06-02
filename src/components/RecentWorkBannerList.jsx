@@ -16,7 +16,7 @@ const RecentWorkBannerList = () => {
     setIsModalVisibleForView(false);
     setSelectedRecentWork(null);
   };
-
+let siteurl = import.meta.env.VITE_URL;
   // Handle search input change
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);

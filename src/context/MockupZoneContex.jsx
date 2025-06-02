@@ -6,11 +6,11 @@ import axios from "../axios";
 export const MockupZoneContext = createContext();
 
 export const MockupZoneContextProvider = ({ children }) => {
-  const [mockupZone, setMockupZone] = useState();
+  const [mockupZones, setMockupZones] = useState([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    fetchMockupZone();
+    getAllMockupZone();
   }, []);
 
   /**
@@ -27,7 +27,7 @@ export const MockupZoneContextProvider = ({ children }) => {
     try {
       const response = await axios.post("/mockup-zones", data, config);
       if (response.status === 201) {
-        setMockupZone([...mockupZone, response.data]);
+        setMockupZones([...mockupZones, response.data]);
         notification.success({
           duration: 2,
           message: "MockupZone created successfully!",
@@ -53,14 +53,13 @@ export const MockupZoneContextProvider = ({ children }) => {
    *
    * @returns {Promise} - A promise of the request.
    */
-  const fetchMockupZone = async () => {
+  const getAllMockupZone = async () => {
     try {
       const response = await axios.get("/mockup-zones");
-      if (response.status === 200) {
-        setMockupZone(response.data);
-      }
+      console.log("API Response:", response.data);
+      setMockupZones(response.data);
     } catch (error) {
-      console.error(error.message);
+      console.error("Error fetching mockup zones:", error);
     }
   };
 
@@ -77,7 +76,7 @@ export const MockupZoneContextProvider = ({ children }) => {
     try {
       const response = await axios.delete(`/mockup-zones/${id}`);
       if (response.status === 200) {
-        fetchMockupZone();
+        getAllMockupZone();
         notification.success({
           duration: 2,
           message: "MockupZone deleted successfully!",
@@ -110,7 +109,7 @@ export const MockupZoneContextProvider = ({ children }) => {
     try {
       const response = await axios.patch(`/mockup-zones/${id}`, data, config);
       if (response.status === 200) {
-        fetchMockupZone();
+        getAllMockupZone();
         notification.success({
           duration: 2,
           message: "MockupZone updated successfully!",
@@ -132,12 +131,13 @@ export const MockupZoneContextProvider = ({ children }) => {
   return (
     <MockupZoneContext.Provider
       value={{
-        mockupZone,
-        setMockupZone,
+        mockupZones,
+        setMockupZones,
         createMockupZone,
         loading,
         deleteMockupZone,
         updateMockupZone,
+        getAllMockupZone,
       }}
     >
       {children}
