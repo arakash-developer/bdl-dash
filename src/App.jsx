@@ -27,6 +27,7 @@ import RecentWorks from "./pages/RecentWorks";
 import Services from "./pages/Services";
 import Specification from "./pages/Specification";
 import UserManagement from "./pages/UserManagement";
+import MokupBanner from "./components/MokupBanner";
 
 function App() {
   return (
@@ -45,6 +46,14 @@ function App() {
               element={
                 <RecentWorksBannerContextProvider>
                   <RecentWorkBanner />
+                </RecentWorksBannerContextProvider>
+              }
+            />
+            <Route
+              path="/mokup-banner"
+              element={
+                <RecentWorksBannerContextProvider>
+                  <MokupBanner />
                 </RecentWorksBannerContextProvider>
               }
             />
