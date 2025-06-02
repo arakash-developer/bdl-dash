@@ -1,7 +1,5 @@
-import { Button, Col, Image, Input, Modal, Popconfirm, Row, Table } from "antd";
+import { Button, Image, Input, Modal, Popconfirm, Table } from "antd";
 import { useContext, useState } from "react";
-import RecentWorksBannerContext from "../context/RecentWorkBannerContext";
-import RecentWorkBannerEdit from "./RecentWorkBannerEdit";
 import MokupBannerContext from "../context/MokupBannerContex";
 const MokupBannerList = () => {
   //Modal for View
@@ -10,9 +8,7 @@ const MokupBannerList = () => {
   const [selectedRecentWork, setSelectedRecentWork] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [series, setSeries] = useState([]);
-  let { mokupBanner, deleteRecentWorkBanner } = useContext(
-    MokupBannerContext
-  );
+  let { mokupBanner, deleteRecentWorkBanner } = useContext(MokupBannerContext);
   const handleViewCancel = () => {
     setIsModalVisibleForView(false);
     setSelectedRecentWork(null);
@@ -147,7 +143,6 @@ const MokupBannerList = () => {
           style={{ width: 300 }}
         />
       </div>
-
       {/* Table */}
       <Table
         columns={columns}
@@ -156,59 +151,84 @@ const MokupBannerList = () => {
         pagination={{ pageSize: 5 }}
         rowKey="_id"
       />
-
       {/* Modal for View */}
       <Modal
-        title="View Recent Work Banner"
+        title="View Mockup Banner"
         visible={isModalVisibleForView}
         onCancel={handleViewCancel}
         footer={null}
         style={{ top: 20 }}
         width={1200}
       >
-        <div>
-          <p className="font-semibold text-xl mb-4">
+        <div className="space-y-4">
+          <p className="font-semibold text-xl">
+            Title:
+            <span className="ml-1 capitalize text-green-500 text-2xl">
+              {selectedRecentWork?.title || "Untitled"}
+            </span>
+          </p>
+
+          <p className="font-semibold text-xl">
+            Zone:
+            <span className="ml-1 capitalize text-green-500 text-2xl">
+              {selectedRecentWork?.mokupzone}
+            </span>
+          </p>
+
+          <p className="font-semibold text-xl">
             Project Name:
             <span className="ml-1 capitalize text-green-500 text-2xl">
-              {selectedRecentWork?.title}
+              {selectedRecentWork?.projectName || "No Project Name"}
             </span>
           </p>
-          <p className="font-semibold text-xl mb-4">
-            Recent Project Name:
-            <span className="ml-1 capitalize text-green-500 text-2xl">
-              {selectedRecentWork?.recentProjectName || "No Recent Project"}
-            </span>
-          </p>
-          <p className="font-semibold text-xl mb-4">
-            Prioroty:{" "}
+
+          <p className="font-semibold text-xl">
+            Priority:
             <span className="ml-1 text-green-500 text-2xl">
-              {selectedRecentWork?.priority}{" "}
+              {selectedRecentWork?.priority}
             </span>
           </p>
-          <p className="font-semibold text-xl mb-4">
-            Status:{" "}
+
+          <p className="font-semibold text-xl">
+            Status:
             <span className="ml-1 capitalize text-green-500 text-2xl">
-              {selectedRecentWork?.status}{" "}
+              {selectedRecentWork?.status}
             </span>
           </p>
-        </div>
-        <p style={{ fontWeight: "bold" }}>Images:</p>
-        <Row gutter={[16, 16]}>
-          <Col>
+
+          <div>
+            <p className="font-semibold text-xl mb-2">Banner Image:</p>
             <Image.PreviewGroup>
               <Image
-                preview={true} // Disable default preview
-                src={`${import.meta.env.VITE_URL + selectedRecentWork?.image}`}
-                //   alt={`Image ${index + 1}`}
-                style={{ width: "100%", height: 150, objectFit: "cover" }}
+                preview={true}
+                src={`${import.meta.env.VITE_URL}${selectedRecentWork?.image}`}
+                style={{
+                  width: "100%",
+                  height: "auto",
+                  maxHeight: "400px",
+                  objectFit: "contain",
+                }}
                 lazy={true}
               />
             </Image.PreviewGroup>
-          </Col>
-        </Row>
-      </Modal>
+          </div>
 
-      {/* Modal for Edit */}
+          <p className="font-semibold text-xl">
+            Created At:-
+            <span className="ml-1 text-green-500 text-lg">
+              {new Date(selectedRecentWork?.createdAt).toLocaleString()}
+            </span>
+          </p>
+
+          <p className="font-semibold text-xl">
+            Updated At:
+            <span className="ml-1 text-green-500 text-lg">
+              {new Date(selectedRecentWork?.updatedAt).toLocaleString()}
+            </span>
+          </p>
+        </div>
+      </Modal>
+      -{/* Modal for Edit */}
       {/* <RecentWorkBannerEdit
         recentWork={selectedRecentWork}
         onCancel={handleEditCancel}
