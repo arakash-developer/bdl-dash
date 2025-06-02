@@ -1,6 +1,7 @@
 import { Button, Image, Input, Modal, Popconfirm, Table } from "antd";
 import { useContext, useState } from "react";
 import MokupBannerContext from "../context/MokupBannerContex";
+import MokupBannerEdit from "./MokupBannerEdit";
 const MokupBannerList = () => {
   //Modal for View
   const [isModalVisibleForView, setIsModalVisibleForView] = useState(false);
@@ -228,15 +229,12 @@ const MokupBannerList = () => {
           </p>
         </div>
       </Modal>
-      -{/* Modal for Edit */}
-      {/* <RecentWorkBannerEdit
+      {/* Modal for Edit */}
+      <MokupBannerEdit
         recentWork={selectedRecentWork}
         onCancel={handleEditCancel}
         visible={isModalVisibleForEdit}
-        recentProjectName={
-          selectedRecentWork?.recentProjectName || "No Recent Project"
-        }
-      /> */}
+      />
     </>
   );
 };
