@@ -37,6 +37,18 @@ export const RecentWorksBannerContextProvider = ({ children }) => {
     }
   };
 
+  const checkBannerExists = async (recentWorkId) => {
+    try {
+      const existingBanners = recentWorks.filter(
+        (banner) => banner.recentWork === recentWorkId
+      );
+      return existingBanners.length > 0;
+    } catch (error) {
+      console.error(error.message);
+      return false;
+    }
+  };
+
   /**
    * Creates a new recent work
    * @param {object} data - Object with the new recent work data
@@ -46,20 +58,38 @@ export const RecentWorksBannerContextProvider = ({ children }) => {
   const createRecentWorkBanner = async (data, config) => {
     setLoading(true);
     try {
+      const recentWorkId = data.get("recentWork");
+
+      if (!recentWorkId) {
+        notification.error({
+          message: "Recent work is required",
+          duration: 2,
+        });
+        return;
+      }
+
+      const exists = await checkBannerExists(recentWorkId);
+      if (exists) {
+        notification.error({
+          message: "Banner already exists",
+          description: "This recent work already has an associated banner",
+          duration: 2,
+        });
+        return;
+      }
+
       const response = await axios.post("/recentWorkBanner", data, config);
       if (response.status === 201) {
         getRecentWorksBanner();
         notification.success({
           duration: 2,
-          message: "Recent work created successfully!",
+          message: "Recent work banner created successfully!",
         });
       }
     } catch (error) {
       console.error(error.message);
       notification.error({
-        message: error.response.data.message
-          ? error.response.data.message
-          : error.message,
+        message: error.response?.data?.message || error.message,
         duration: 2,
       });
     } finally {
@@ -81,7 +111,6 @@ export const RecentWorksBannerContextProvider = ({ children }) => {
    * @param {string} id - The id of the recent work to delete.
    * @returns {Promise} - A promise of the request.
    */
-
 
   const deleteRecentWorkBanner = async (id) => {
     setLoading(true);
@@ -110,7 +139,11 @@ export const RecentWorksBannerContextProvider = ({ children }) => {
   const updateRecentWorkBanner = async (id, data, config) => {
     setLoading(true);
     try {
-      const response = await axios.patch(`/recentWorkBanner/${id}`, data, config);
+      const response = await axios.patch(
+        `/recentWorkBanner/${id}`,
+        data,
+        config
+      );
       if (response.status === 200) {
         getRecentWorksBanner();
         notification.success({
@@ -140,6 +173,7 @@ export const RecentWorksBannerContextProvider = ({ children }) => {
         updateRecentWorkBanner,
         deleteRecentWorkBanner,
         loading,
+        checkBannerExists, // Add this to the context value
       }}
     >
       {children}

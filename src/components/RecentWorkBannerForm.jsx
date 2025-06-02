@@ -20,7 +20,9 @@ const uploadButton = (
 );
 const RecentWorkBannerForm = () => {
   const [form] = Form.useForm();
-  const { createRecentWorkBanner } = useContext(RecentWorksBannerContext);
+  const { createRecentWorkBanner, checkBannerExists } = useContext(
+    RecentWorksBannerContext
+  );
   const [series, setSeries] = useState([]);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [images, setImages] = useState([]);
@@ -49,48 +51,72 @@ const RecentWorkBannerForm = () => {
     setImages(newImagesFileList);
 
   const onFinish = async (values) => {
-    const formData = new FormData();
-    let a = series.filter((s) => s._id === recentWorkBanner);
-    let recentProjectName = a[0]?.title;
-
-    if (values.title) formData.append("title", values.title);
-    if (values.priority) formData.append("priority", values.priority);
-    if (values.status) formData.append("status", values.status);
-    if (recentWorkBanner) formData.append("recentWork", recentWorkBanner);
-    if (recentProjectName)
-      formData.append("recentProjectName", recentProjectName);
-
-    if (images.length > 0) {
-      images.forEach((image) => {
-        formData.append("image", image.originFileObj);
-      });
-    }
-
-    // Set up the config to track the progress
-    const config = {
-      onUploadProgress: (progressEvent) => {
-        const percentCompleted = Math.round(
-          (progressEvent.loaded * 100) / progressEvent.total
-        );
-        setUploadProgress(percentCompleted); // Update the progress
-      },
-    };
-
-    // Submit the form data to the server
     try {
-      await createRecentWorkBanner(formData, config);
+      if (!recentWorkBanner) {
+        notification.error({
+          message: "Please select a recent work",
+          duration: 2,
+        });
+        return;
+      }
+
+      // Check if banner exists
+      const exists = await checkBannerExists(recentWorkBanner);
+      if (exists) {
+        notification.error({
+          message: "Banner already exists",
+          description:
+            "This recent work already has a banner associated with it.",
+          duration: 3,
+        });
+        return;
+      }
+
+      const formData = new FormData();
+      let a = series.filter((s) => s._id === recentWorkBanner);
+      let recentProjectName = a[0]?.title;
+
+      if (values.title) formData.append("title", values.title);
+      if (values.priority) formData.append("priority", values.priority);
+      if (values.status) formData.append("status", values.status);
+      if (recentWorkBanner) formData.append("recentWork", recentWorkBanner);
+      if (recentProjectName)
+        formData.append("recentProjectName", recentProjectName);
+
+      if (images.length > 0) {
+        images.forEach((image) => {
+          formData.append("image", image.originFileObj);
+        });
+      }
+
+      // Set up the config to track the progress
+      const config = {
+        onUploadProgress: (progressEvent) => {
+          const percentCompleted = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total
+          );
+          setUploadProgress(percentCompleted); // Update the progress
+        },
+      };
+
+      // Submit the form data to the server
+      try {
+        await createRecentWorkBanner(formData, config);
+      } catch (error) {
+        console.error(error.message);
+        notification.error({
+          message: error.response.data.message
+            ? error.response.data.message
+            : error.message,
+          duration: 2,
+        });
+      } finally {
+        setUploadProgress(0);
+        form.resetFields();
+        setImages([]);
+      }
     } catch (error) {
-      console.error(error.message);
-      notification.error({
-        message: error.response.data.message
-          ? error.response.data.message
-          : error.message,
-        duration: 2,
-      });
-    } finally {
-      setUploadProgress(0);
-      form.resetFields();
-      setImages([]);
+      console.error("Error in onFinish:", error);
     }
   };
 
