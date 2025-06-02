@@ -28,7 +28,7 @@ import Services from "./pages/Services";
 import Specification from "./pages/Specification";
 import UserManagement from "./pages/UserManagement";
 import MokupBanner from "./components/MokupBanner";
-
+import {MokupBannerContextProvider} from "./context/MokupBannerContex";
 function App() {
   return (
     <Router>
@@ -50,11 +50,11 @@ function App() {
               }
             />
             <Route
-              path="/mokup-banner"
+              path="/mokupzone-banner"
               element={
-                <RecentWorksBannerContextProvider>
+                <MokupBannerContextProvider>
                   <MokupBanner />
-                </RecentWorksBannerContextProvider>
+                </MokupBannerContextProvider>
               }
             />
             <Route

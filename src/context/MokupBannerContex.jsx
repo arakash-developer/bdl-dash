@@ -1,0 +1,154 @@
+//create Recent works Context
+import { notification } from "antd";
+import PropTypes from "prop-types";
+import { createContext, useEffect, useState } from "react";
+import axios from "../axios";
+
+export const MokupBannerContext = createContext();
+
+export const MokupBannerContextProvider = ({ children }) => {
+  const [recentWorks, setRecentWorks] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    getRecentWorksBanner();
+  }, []);
+
+  /**
+   * Fetches recent works from the server
+   * @returns {Promise<void>}
+   */
+  const getRecentWorksBanner = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get("/mokupzone-banner");
+      if (response.status === 200) {
+        setLoading(false);
+        setRecentWorks(response.data);
+      }
+    } catch (error) {
+      console.error(error.message);
+      notification.error({
+        message: error.response.data.message
+          ? error.response.data.message
+          : error.message,
+        duration: 2,
+      });
+    }
+  };
+
+  /**
+   * Creates a new recent work
+   * @param {object} data - Object with the new recent work data
+   * @param {object} config - Request configuration object
+   * @returns {Promise<void>}
+   */
+  const createRecentWorkBanner = async (data, config) => {
+    setLoading(true);
+    try {
+      const response = await axios.post("/recentWorkBanner", data, config);
+      if (response.status === 201) {
+        getRecentWorksBanner();
+        notification.success({
+          duration: 2,
+          message: "Recent work created successfully!",
+        });
+      }
+    } catch (error) {
+      console.error(error.message);
+      notification.error({
+        message: error.response.data.message
+          ? error.response.data.message
+          : error.message,
+        duration: 2,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  /**
+   * Updates a recent work
+   * Makes a PATCH request to the server to update a recent work.
+   * @param {string} id - The id of the recent work to update.
+   * @param {object} data - Object with the new recent work data.
+   * @param {object} config - Request configuration object.
+   * @returns {Promise} - A promise of the request.
+   */
+  /**
+   * Deletes a recent work.
+   * Makes a DELETE request to the server to delete a recent work.
+   * @param {string} id - The id of the recent work to delete.
+   * @returns {Promise} - A promise of the request.
+   */
+
+
+  const deleteRecentWorkBanner = async (id) => {
+    setLoading(true);
+    try {
+      const response = await axios.delete(`/recentWorkBanner/${id}`);
+      if (response.status === 200) {
+        getRecentWorksBanner();
+        notification.success({
+          duration: 2,
+          message: "Recent work deleted successfully!",
+        });
+      }
+    } catch (error) {
+      console.error(error.message);
+      notification.error({
+        message: error.response.data.message
+          ? error.response.data.message
+          : error.message,
+        duration: 2,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateRecentWorkBanner = async (id, data, config) => {
+    setLoading(true);
+    try {
+      const response = await axios.patch(`/recentWorkBanner/${id}`, data, config);
+      if (response.status === 200) {
+        getRecentWorksBanner();
+        notification.success({
+          duration: 2,
+          message: "Recent work updated successfully!",
+        });
+      }
+    } catch (error) {
+      console.error(error.message);
+      notification.error({
+        message: error.response.data.message
+          ? error.response.data.message
+          : error.message,
+        duration: 2,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <MokupBannerContext.Provider
+      value={{
+        recentWorks,
+        setRecentWorks,
+        createRecentWorkBanner,
+        updateRecentWorkBanner,
+        deleteRecentWorkBanner,
+        loading,
+      }}
+    >
+      {children}
+    </MokupBannerContext.Provider>
+  );
+};
+
+export default MokupBannerContext;
+
+MokupBannerContextProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+};
