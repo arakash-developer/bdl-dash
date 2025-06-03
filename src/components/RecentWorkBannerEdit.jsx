@@ -20,7 +20,12 @@ const uploadButton = (
     <div style={{ marginTop: 8 }}>Upload</div>
   </div>
 );
-const RecentWorkBannerEdit = ({ recentWork, onCancel, visible ,recentProjectName}) => {
+const RecentWorkBannerEdit = ({
+  recentWork,
+  onCancel,
+  visible,
+  recentProjectName,
+}) => {
   const { updateRecentWorkBanner, loading } = useContext(
     RecentWorksBannerContext
   );
@@ -42,7 +47,7 @@ const RecentWorkBannerEdit = ({ recentWork, onCancel, visible ,recentProjectName
 
   useEffect(() => {
     getAllSerise();
-  },[]);
+  }, []);
 
   useEffect(() => {
     if (recentWork) {
@@ -76,7 +81,11 @@ const RecentWorkBannerEdit = ({ recentWork, onCancel, visible ,recentProjectName
     let recentProjectName = a[0]?.title;
 
     if (values.title) formData.append("title", values.title);
-    if (values.priority) formData.append("priority", values.priority);
+    // Convert priority to string before appending
+    if (values.priority !== undefined && values.priority !== null) {
+      formData.append("priority", values.priority.toString());
+    }
+    // Make sure status is properly appended
     if (values.status) formData.append("status", values.status);
     if (recentWorkBanner) formData.append("recentWork", recentWorkBanner);
     if (recentProjectName)
@@ -163,7 +172,7 @@ const RecentWorkBannerEdit = ({ recentWork, onCancel, visible ,recentProjectName
                 width: "100%",
               }}
               className="col-span-2"
-              placeholder={recentProjectName || "Select Recent Work"}  
+              placeholder={recentProjectName || "Select Recent Work"}
               onChange={(value) => setRecentWorkBanner(value)}
             >
               {series.map((item) => (
