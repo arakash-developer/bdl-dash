@@ -24,6 +24,7 @@ const RecentWorkCreateForm = () => {
   const [series, setSeries] = useState([]);
 
   const [uploadProgress, setUploadProgress] = useState(0); // State for progress
+  const [isUploading, setIsUploading] = useState(false); // New state for tracking upload status
 
   const [images, setImages] = useState([]);
   const [videos, setVideos] = useState([]);
@@ -50,6 +51,8 @@ const RecentWorkCreateForm = () => {
     setThumbnail(newThumbnailFileList);
 
   const onFinish = async (values) => {
+    setIsUploading(true); // Set uploading to true when starting
+
     const formData = new FormData();
 
     if (values.title) formData.append("title", values.title);
@@ -87,20 +90,26 @@ const RecentWorkCreateForm = () => {
     // Submit the form data to the server
     try {
       await createRecentWork(formData, config);
+      notification.success({
+        message: "Upload Complete",
+        description: "Recent work has been successfully created.",
+        duration: 4,
+      });
     } catch (error) {
       console.error(error.message);
       notification.error({
-        message: error.response.data.message
-          ? error.response.data.message
-          : error.message,
-        duration: 2,
+        message: error.response?.data?.message || error.message,
+        duration: 4,
       });
     } finally {
-      setUploadProgress(0);
-      form.resetFields();
-      setImages([]);
-      setVideos([]);
-      setThumbnail([]);
+      setTimeout(() => {
+        setUploadProgress(0);
+        setIsUploading(false); // Reset uploading state after completion
+        form.resetFields();
+        setImages([]);
+        setVideos([]);
+        setThumbnail([]);
+      }, 1000); // Small delay to show 100% completion
     }
   };
 
@@ -211,7 +220,7 @@ const RecentWorkCreateForm = () => {
               fileList={thumbnail}
               beforeUpload={() => false}
               onChange={handleThumbnailChange}
-              maltiple
+              multiple
             >
               {thumbnail.length >= 1 ? null : uploadButton}
             </Upload>
@@ -259,13 +268,20 @@ const RecentWorkCreateForm = () => {
             }}
             percent={uploadProgress}
             size={["100%", 20]}
+            status={uploadProgress === 100 ? "success" : "active"}
           />
         )}
 
-        {/* Submit Button */}
+        {/* Submit Button - disabled during upload */}
         <div className="col-span-2 mt-3">
-          <Button type="primary" htmlType="submit" className="w-full">
-            Submit
+          <Button
+            type="primary"
+            htmlType="submit"
+            className="w-full"
+            loading={isUploading}
+            disabled={isUploading}
+          >
+            {isUploading ? "Uploading..." : "Submit"}
           </Button>
         </div>
       </Form>
