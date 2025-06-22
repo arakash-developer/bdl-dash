@@ -2,10 +2,10 @@ name: Deployment to CP
 on:
   push:
     branches:
-      - main
+      - khj
   pull_request:
     branches:
-      - main
+      - khj
 
 jobs:
   build:
