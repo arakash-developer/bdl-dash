@@ -1,6 +1,6 @@
 import { Modal, notification } from "antd";
 import PropTypes from "prop-types";
-import { createContext, useEffect } from "react";
+import { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import customAxios from "../axios";
 
@@ -8,6 +8,16 @@ export const AuthContext = createContext();
 
 const AuthContextProvider = ({ children }) => {
   const navigate = useNavigate();
+  const [isAuthChecking, setIsAuthChecking] = useState(true);
+
+  useEffect(() => {
+    // Check if the user is already logged in
+    const admin = localStorage.getItem("admin");
+    if (!admin) {
+      navigate("/login");
+    }
+    setIsAuthChecking(false);
+  }, [navigate]);
 
   const userInfo = JSON.parse(localStorage.getItem("userInfo")) || {};
 
@@ -15,11 +25,13 @@ const AuthContextProvider = ({ children }) => {
     try {
       const res = await customAxios.post("/users/login", data);
       if (res.status === 200) {
+        localStorage.setItem("admin", true);
         if (res.data.role === "admin") {
           localStorage.setItem("userInfo", JSON.stringify(res.data));
           notification.success({ duration: 2, message: "Login Successful" });
           navigate("/");
         } else {
+          navigate("/login");
           Modal.error({
             title: "Error",
             content: (
@@ -27,7 +39,7 @@ const AuthContextProvider = ({ children }) => {
                 You are not authorized to access this Site.
               </p>
             ),
-            onOk: () => navigate("/login"),
+            // onOk: () => navigate("/login"),
           });
         }
       }
@@ -70,8 +82,10 @@ const AuthContextProvider = ({ children }) => {
   }, [navigate, userInfo]);
 
   return (
-    <AuthContext.Provider value={{ loginUser, userInfo, logoutUser }}>
-      {children}
+    <AuthContext.Provider
+      value={{ loginUser, userInfo, logoutUser, isAuthChecking }}
+    >
+      {!isAuthChecking ? children : null}
     </AuthContext.Provider>
   );
 };
