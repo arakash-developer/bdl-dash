@@ -2,12 +2,15 @@ import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import Layout from "./components/Layout";
 import Products from "./pages/Products";
 
+import MokupBanner from "./components/MokupBanner";
+import UserProfile from "./components/UserProfile";
 import AcademyContextProvider from "./context/AcademyContext";
 import AuthContextProvider from "./context/AuthContext";
 import CompanyProfileContextProvider from "./context/CompanyProfileContext";
 import { CustomerProvider } from "./context/CustomerContext";
 import { GreetingContextProvider } from "./context/GreetingContext";
 import MockupZoneContextProvider from "./context/MockupZoneContex";
+import { MokupBannerContextProvider } from "./context/MokupBannerContex";
 import ProductContextProvider from "./context/ProductContext";
 import { RecentWorksBannerContextProvider } from "./context/RecentWorkBannerContext";
 import { RecentWorksContextProvider } from "./context/RecentWorksContext";
@@ -27,8 +30,6 @@ import RecentWorks from "./pages/RecentWorks";
 import Services from "./pages/Services";
 import Specification from "./pages/Specification";
 import UserManagement from "./pages/UserManagement";
-import MokupBanner from "./components/MokupBanner";
-import {MokupBannerContextProvider} from "./context/MokupBannerContex";
 function App() {
   return (
     <Router>
@@ -136,6 +137,7 @@ function App() {
                 </CustomerProvider>
               }
             />
+            <Route path="/user-profile" element={<UserProfile />} />
           </Route>
         </Routes>
       </AuthContextProvider>

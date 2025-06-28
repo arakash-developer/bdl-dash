@@ -1,5 +1,5 @@
 import { Card, Col, message, Progress, Row, Statistic } from "antd";
-import React, { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   Bar,
   BarChart,
@@ -13,8 +13,10 @@ import {
   YAxis,
 } from "recharts";
 import axios from "../axios";
+import { AuthContext } from "../context/AuthContext";
 
 const Home = () => {
+  const { userInfo } = useContext(AuthContext);
   const [dashboardData, setDashboardData] = useState({
     groupsCount: 0,
     seriesCount: 0,
@@ -77,6 +79,48 @@ const Home = () => {
 
   return (
     <div className="p-4 bg-gray-100 min-h-screen">
+      {/* Welcome Section */}
+      <Row gutter={[16, 16]} className="mb-6">
+        <Col span={24}>
+          <Card
+            className="shadow-lg text-white"
+            style={{ backgroundColor: "rgb(31 41 55)" }}
+          >
+            <div className="flex items-center space-x-4">
+              <div className="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                <span className="text-2xl font-bold text-white">
+                  {userInfo?.name ? userInfo.name.charAt(0).toUpperCase() : "U"}
+                </span>
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-white mb-1">
+                  Welcome back, {userInfo?.name || "User"}!
+                </h1>
+                <p className="text-blue-100 mb-2">
+                  Role:{" "}
+                  {userInfo?.role
+                    ? userInfo.role.charAt(0).toUpperCase() +
+                      userInfo.role.slice(1)
+                    : "User"}
+                </p>
+                <div className="flex items-center space-x-2 mt-2">
+                  <div
+                    className={`w-2 h-2 rounded-full ${
+                      userInfo?.createdAt ? "bg-green-400" : "bg-yellow-400"
+                    }`}
+                  />
+                  <span className="text-blue-100 text-xs">
+                    {userInfo?.createdAt
+                      ? "Live data from backend"
+                      : "Cached data"}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </Card>
+        </Col>
+      </Row>
+
       <Row gutter={[16, 16]}>
         <Col span={4}>
           <Card className="shadow-md hover:shadow-lg transition duration-300 bg-white">

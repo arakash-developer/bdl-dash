@@ -2,6 +2,57 @@
 @tailwind components;
 @tailwind utilities;
 
+/* BDL Rainbow Gradient Animation - matching your website style */
+.bdl-rainbow-border {
+  position: relative;
+  background: linear-gradient(
+    90deg,
+    #ff0000,
+    #ff7300,
+    #fffb00,
+    #48ff00,
+    #00ffd5,
+    #002bff,
+    #7a00ff,
+    #ff00f5,
+    #ff0000
+  );
+  background-size: 300% 300%;
+  animation: rainbowMove 3s linear infinite;
+}
+
+.bdl-rainbow-text {
+  background: linear-gradient(
+    90deg,
+    #ff0000,
+    #ff7300,
+    #fffb00,
+    #48ff00,
+    #00ffd5,
+    #002bff,
+    #7a00ff,
+    #ff00f5,
+    #ff0000
+  );
+  background-size: 300% 300%;
+  animation: rainbowMove 4s linear infinite;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@keyframes rainbowMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
 .custom-upload-image {
   height: 150px;
   width: 150px;

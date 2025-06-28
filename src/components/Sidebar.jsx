@@ -66,14 +66,25 @@
 
 // export default Sidebar;
 
+import { useContext, useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
 const Sidebar = () => {
+  const { userInfo, logoutUser } = useContext(AuthContext);
+  const [dataSource, setDataSource] = useState("localStorage");
+
+  useEffect(() => {
+    // Check if userInfo has full backend data (more fields than just basic login response)
+    if (userInfo?.name && userInfo?.email && userInfo?.createdAt) {
+      setDataSource("backend");
+    } else {
+      setDataSource("localStorage");
+    }
+  }, [userInfo]);
+
   const handleLogout = () => {
-    // Add your logout logic here
-    // For example: clear localStorage, redirect to login, etc.
-    localStorage.clear();
-    window.location.href = "/login";
+    logoutUser();
   };
 
   return (
@@ -245,6 +256,18 @@ const Sidebar = () => {
           </li>
           <li>
             <NavLink
+              to="/user-profile"
+              className={({ isActive }) =>
+                `block py-2.5 px-4 rounded transition duration-200 ${
+                  isActive ? "bg-gray-700" : "hover:bg-gray-700"
+                }`
+              }
+            >
+              My Profile
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
               to="/user-mangement"
               className={({ isActive }) =>
                 `block py-2.5 px-4 rounded transition duration-200 ${
@@ -273,7 +296,10 @@ const Sidebar = () => {
       {/* User Profile with Logout */}
       <div className="p-4 border-t border-gray-700">
         <div className="flex items-center justify-between bg-gray-900 rounded-lg p-3">
-          <div className="flex items-center space-x-3">
+          <NavLink
+            to="/user-profile"
+            className="flex items-center space-x-3 flex-1 hover:bg-gray-800 rounded-lg p-2 transition duration-200"
+          >
             <div className="w-10 h-10 bg-gray-600 rounded-full flex items-center justify-center overflow-hidden">
               <img
                 src="/api/placeholder/40/40"
@@ -288,14 +314,33 @@ const Sidebar = () => {
                 className="w-full h-full bg-gray-600 rounded-full flex items-center justify-center text-white text-sm font-medium"
                 style={{ display: "none" }}
               >
-                A
+                {userInfo?.name ? userInfo.name.charAt(0).toUpperCase() : "U"}
               </div>
             </div>
             <div className="flex flex-col">
-              <span className="text-white text-sm font-medium">Akash_dev</span>
-              <span className="text-gray-400 text-xs">Administrator</span>
+              <span className="text-white text-sm font-medium">
+                {userInfo?.name || "User"}
+              </span>
+              <div className="flex items-center space-x-2">
+                <span className="text-gray-400 text-xs">
+                  {userInfo?.role
+                    ? userInfo.role.charAt(0).toUpperCase() +
+                      userInfo.role.slice(1)
+                    : "User"}
+                </span>
+                <div
+                  className={`w-2 h-2 rounded-full ${
+                    dataSource === "backend" ? "bg-green-500" : "bg-yellow-500"
+                  }`}
+                  title={
+                    dataSource === "backend"
+                      ? "Data from Backend"
+                      : "Data from localStorage"
+                  }
+                />
+              </div>
             </div>
-          </div>
+          </NavLink>
           <button
             onClick={handleLogout}
             className="w-8 h-8 bg-gray-700 hover:bg-red-600 rounded-full flex items-center justify-center transition duration-200 group"
