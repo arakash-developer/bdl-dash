@@ -90,7 +90,7 @@ const Sidebar = () => {
   return (
     <div className="h-screen w-64 bg-gray-800 text-white flex flex-col">
       <div className="p-4">
-        <h2 className="text-xl font-bold">Dashboard</h2>
+        <h2 className="text-xl font-bold uppercase">BDL Dashboard</h2>
       </div>
       <nav className="mt-8 flex-1">
         <ul>
