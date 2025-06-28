@@ -89,13 +89,13 @@ const Sidebar = () => {
 
   return (
     <div className="h-screen w-64 bg-gradient-to-b from-gray-800 via-gray-800 to-gray-900 text-white flex flex-col font-primary shadow-2xl">
-      <div className="pt-8 pb-3 px-3 border-b border-gray-700/50">
-        <h2 className="text-2xl font-secondary font-bold uppercase tracking-wide bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+      <div className="pt-8 pb-3 px-3 border-b border-gray-700/50 flex-shrink-0">
+        <h2 className="text-lg font-secondary font-bold uppercase tracking-wide bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
           BDL Dashboard
         </h2>
       </div>
-      <nav className="mt-6 flex-1 px-2">
-        <ul className="space-y-1">
+      <nav className="mt-6 flex-1 px-2 overflow-y-auto scrollbar-hide">
+        <ul className="space-y-1 pb-4">
           <li>
             <NavLink
               to="/"
@@ -328,7 +328,7 @@ const Sidebar = () => {
       </nav>
 
       {/* User Profile with Logout */}
-      <div className="p-4 border-t border-gray-700">
+      <div className="p-4 border-t border-gray-700 flex-shrink-0">
         <div className="flex items-center justify-between bg-gray-900 rounded-lg p-3">
           <NavLink
             to="/user-profile"
