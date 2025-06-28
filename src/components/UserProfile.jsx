@@ -1,32 +1,9 @@
-import { ReloadOutlined } from "@ant-design/icons";
-import { Button, Card, Descriptions, Tag, notification } from "antd";
+import { Card, Descriptions, Tag } from "antd";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 
 const UserProfile = () => {
-  const { userInfo, fetchUserData } = useContext(AuthContext);
-
-  // Get all user data from localStorage for debugging
-  const rawUserData = localStorage.getItem("userInfo");
-  const parsedUserData = rawUserData ? JSON.parse(rawUserData) : {};
-
-  const handleRefreshUserData = async () => {
-    if (userInfo._id || userInfo.user) {
-      const userId = userInfo._id || userInfo.user;
-      try {
-        await fetchUserData(userId);
-        notification.success({
-          message: "User data refreshed successfully!",
-          duration: 2,
-        });
-      } catch (error) {
-        notification.error({
-          message: "Failed to refresh user data",
-          duration: 2,
-        });
-      }
-    }
-  };
+  const { userInfo } = useContext(AuthContext);
 
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
@@ -46,16 +23,8 @@ const UserProfile = () => {
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
       <div className="max-w-4xl mx-auto">
-        <div className="flex justify-between items-center mb-6">
+        <div className="mb-6">
           <h1 className="text-3xl font-bold text-gray-800">User Profile</h1>
-          <Button
-            type="primary"
-            icon={<ReloadOutlined />}
-            onClick={handleRefreshUserData}
-            loading={false}
-          >
-            Refresh Data
-          </Button>
         </div>
 
         {/* Profile Overview Card */}
@@ -70,12 +39,17 @@ const UserProfile = () => {
               <h2 className="text-2xl font-bold text-gray-800 mb-2">
                 {userInfo?.name || "Unknown User"}
               </h2>
-              <Tag
-                color={userInfo?.role === "admin" ? "red" : "blue"}
-                className="text-sm"
-              >
-                {userInfo?.role ? userInfo.role.toUpperCase() : "USER"}
-              </Tag>
+              <div className="space-y-1">
+                <Tag
+                  color={userInfo?.role === "admin" ? "green" : "blue"}
+                  className="text-sm"
+                >
+                  {userInfo?.role ? userInfo.role.toUpperCase() : "USER"}
+                </Tag>
+                <p className="text-gray-600 text-sm">
+                  {userInfo?.email || "No email provided"}
+                </p>
+              </div>
             </div>
           </div>
         </Card>
@@ -93,7 +67,7 @@ const UserProfile = () => {
               {userInfo?.email || "N/A"}
             </Descriptions.Item>
             <Descriptions.Item label="Role">
-              <Tag color={userInfo?.role === "admin" ? "red" : "blue"}>
+              <Tag color={userInfo?.role === "admin" ? "green" : "blue"}>
                 {userInfo?.role ? userInfo.role.toUpperCase() : "USER"}
               </Tag>
             </Descriptions.Item>
@@ -120,29 +94,6 @@ const UserProfile = () => {
                 : "N/A"}
             </Descriptions.Item>
           </Descriptions>
-        </Card>
-
-        {/* API Response Status */}
-        <Card title="Data Source Status" className="mt-6 shadow-lg">
-          <div className="space-y-2">
-            <p>
-              <strong>Data loaded from:</strong> Backend API (/users/:id)
-            </p>
-            <p>
-              <strong>User ID used:</strong>{" "}
-              {userInfo?._id || userInfo?.user || "N/A"}
-            </p>
-            <p>
-              <strong>Last updated:</strong> {new Date().toLocaleString()}
-            </p>
-          </div>
-        </Card>
-
-        {/* Raw Data Card (for debugging) */}
-        <Card title="Raw User Data (localStorage)" className="mt-6 shadow-lg">
-          <pre className="bg-gray-100 p-4 rounded-md overflow-auto text-sm">
-            {JSON.stringify(parsedUserData, null, 2)}
-          </pre>
         </Card>
       </div>
     </div>
