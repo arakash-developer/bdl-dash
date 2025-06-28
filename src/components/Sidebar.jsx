@@ -89,13 +89,13 @@ const Sidebar = () => {
 
   return (
     <div className="h-screen w-64 bg-gradient-to-b from-gray-800 via-gray-800 to-gray-900 text-white flex flex-col font-primary shadow-2xl">
-      <div className="p-3 border-b border-gray-700/50">
+      <div className="pt-8 pb-3 px-3 border-b border-gray-700/50">
         <h2 className="text-lg font-secondary font-bold uppercase tracking-wide bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
           BDL Dashboard
         </h2>
       </div>
-      <nav className="mt-3 flex-1 px-2">
-        <ul className="space-y-0.5">
+      <nav className="mt-6 flex-1 px-2">
+        <ul className="space-y-1">
           <li>
             <NavLink
               to="/"
