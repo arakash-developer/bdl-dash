@@ -84,25 +84,25 @@ const Home = () => {
   const COLORS = ["#1f2937", "#9ca3af"];
 
   return (
-    <div className="p-4 bg-gray-100 min-h-screen">
+    <div className="p-4 bg-gray-100 min-h-screen font-primary">
       {/* Welcome Section */}
       <Row gutter={[16, 16]} className="mb-6">
         <Col span={24}>
           <Card
-            className="shadow-lg text-white"
+            className="shadow-lg text-white font-primary"
             style={{ backgroundColor: "rgb(31 41 55)" }}
           >
             <div className="flex items-center space-x-4">
               <div className="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
-                <span className="text-2xl font-bold text-white">
+                <span className="text-2xl font-bold text-white font-secondary">
                   {userInfo?.name ? userInfo.name.charAt(0).toUpperCase() : "U"}
                 </span>
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-white mb-1">
+                <h1 className="text-2xl font-bold text-white mb-1 font-secondary">
                   Welcome back, {userInfo?.name || "User"}!
                 </h1>
-                <p className="text-blue-100 mb-2">
+                <p className="text-blue-100 mb-2 font-primary">
                   Role:{" "}
                   {userInfo?.role
                     ? userInfo.role.charAt(0).toUpperCase() +
@@ -115,7 +115,7 @@ const Home = () => {
                       userInfo?.createdAt ? "bg-green-400" : "bg-yellow-400"
                     }`}
                   />
-                  <span className="text-blue-100 text-xs">
+                  <span className="text-blue-100 text-xs font-primary">
                     {userInfo?.createdAt
                       ? "Live data from backend"
                       : "Cached data"}

@@ -13,16 +13,19 @@ const Login = () => {
     if (userInfo.role === "admin") {
       navigate("/");
     }
-  }, [userInfo]);
+  }, [userInfo, navigate]);
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
+    <div className="flex justify-center items-center h-screen bg-gray-100 font-primary">
       <div className="bg-white p-8 shadow-lg rounded-lg max-w-md w-full">
-        <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center font-secondary text-gray-800">
+          BDL Dashboard Login
+        </h2>
         <Form
           name="login"
           layout="vertical"
           initialValues={{ remember: true }}
           onFinish={onFinish}
+          className="font-primary"
         >
           <Form.Item
             label="email"

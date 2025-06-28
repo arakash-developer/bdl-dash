@@ -1,10 +1,9 @@
-import { PropTypes } from "prop-types";
 import { useContext, useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import Sidebar from "./Sidebar";
 
-const Layout = ({ children }) => {
+const Layout = () => {
   const { userInfo } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -14,9 +13,9 @@ const Layout = ({ children }) => {
     }
   });
   return (
-    <div className="flex overflow-hidden">
+    <div className="flex overflow-hidden font-primary">
       <Sidebar />
-      <div className="flex-1 p-2 bg-gray-100 h-screen overflow-y-auto overflow-x-hidden">
+      <div className="flex-1 p-2 bg-gray-100 h-screen overflow-y-auto overflow-x-hidden font-primary">
         <Outlet />
       </div>
     </div>
@@ -24,7 +23,3 @@ const Layout = ({ children }) => {
 };
 
 export default Layout;
-
-Layout.propTypes = {
-  children: PropTypes.node,
-};
