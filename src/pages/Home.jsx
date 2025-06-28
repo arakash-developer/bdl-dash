@@ -1,4 +1,4 @@
-import { Card, Col, message, Progress, Row, Statistic } from "antd";
+import { Card, Col, message, Progress, Row, Spin, Statistic } from "antd";
 import { useContext, useEffect, useState } from "react";
 import {
   Bar,
@@ -67,7 +67,13 @@ const Home = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="p-4 bg-gray-100 min-h-screen flex items-center justify-center">
+        <Spin size="large" tip="Loading dashboard data...">
+          <div className="w-96 h-64 bg-white rounded-lg shadow-md" />
+        </Spin>
+      </div>
+    );
   }
 
   const userData = [
