@@ -69,12 +69,19 @@
 import { NavLink } from "react-router-dom";
 
 const Sidebar = () => {
+  const handleLogout = () => {
+    // Add your logout logic here
+    // For example: clear localStorage, redirect to login, etc.
+    localStorage.clear();
+    window.location.href = "/login";
+  };
+
   return (
-    <div className="h-screen w-64 bg-gray-800 text-white">
+    <div className="h-screen w-64 bg-gray-800 text-white flex flex-col">
       <div className="p-4">
         <h2 className="text-xl font-bold">Dashboard</h2>
       </div>
-      <nav className="mt-8">
+      <nav className="mt-8 flex-1">
         <ul>
           <li>
             <NavLink
@@ -262,6 +269,54 @@ const Sidebar = () => {
           </li>
         </ul>
       </nav>
+
+      {/* User Profile with Logout */}
+      <div className="p-4 border-t border-gray-700">
+        <div className="flex items-center justify-between bg-gray-900 rounded-lg p-3">
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 bg-gray-600 rounded-full flex items-center justify-center overflow-hidden">
+              <img
+                src="/api/placeholder/40/40"
+                alt="Profile"
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  e.target.style.display = "none";
+                  e.target.nextSibling.style.display = "flex";
+                }}
+              />
+              <div
+                className="w-full h-full bg-gray-600 rounded-full flex items-center justify-center text-white text-sm font-medium"
+                style={{ display: "none" }}
+              >
+                A
+              </div>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-white text-sm font-medium">Akash_dev</span>
+              <span className="text-gray-400 text-xs">Administrator</span>
+            </div>
+          </div>
+          <button
+            onClick={handleLogout}
+            className="w-8 h-8 bg-gray-700 hover:bg-red-600 rounded-full flex items-center justify-center transition duration-200 group"
+            title="Logout"
+          >
+            <svg
+              className="w-4 h-4 text-gray-300 group-hover:text-white"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
