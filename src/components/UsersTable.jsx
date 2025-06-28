@@ -10,10 +10,10 @@ import {
   Table,
   Tag,
 } from "antd";
-import React, { useEffect, useState } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import axios from "../axios";
 
-const UsersTable = () => {
+const UsersTable = forwardRef((props, ref) => {
   const [form] = Form.useForm();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -35,6 +35,11 @@ const UsersTable = () => {
       setLoading(false);
     }
   };
+
+  // Expose refreshUsers method to parent component
+  useImperativeHandle(ref, () => ({
+    refreshUsers: fetchUsers,
+  }));
 
   const handleDelete = async (userId) => {
     try {
@@ -206,6 +211,8 @@ const UsersTable = () => {
       </Modal>
     </div>
   );
-};
+});
+
+UsersTable.displayName = "UsersTable";
 
 export default UsersTable;

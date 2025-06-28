@@ -1,10 +1,12 @@
 import { Button, Form, Input, notification, Select } from "antd";
-import React, { useState } from "react";
+import PropTypes from "prop-types";
+import { useState } from "react";
 import axios from "../axios";
 
 const { Option } = Select;
 
-const RegistrationForm = () => {
+const RegistrationForm = ({ onUserCreated }) => {
+  const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
 
   const onFinish = async (values) => {
@@ -15,6 +17,12 @@ const RegistrationForm = () => {
         duration: 2,
         message: res.data.message,
       });
+      // Reset form after successful registration
+      form.resetFields();
+      // Notify parent component that a user was created
+      if (onUserCreated) {
+        onUserCreated();
+      }
     } catch (error) {
       notification.error({
         message: error.response.data.message || "Something went wrong",
@@ -29,6 +37,7 @@ const RegistrationForm = () => {
     <div className="p-6 mx-auto bg-white shadow-md rounded-lg">
       <h1 className="text-2xl mb-4 font-bold">Register</h1>
       <Form
+        form={form}
         layout="vertical"
         onFinish={onFinish}
         initialValues={{ role: "user" }}
@@ -89,6 +98,10 @@ const RegistrationForm = () => {
       </Form>
     </div>
   );
+};
+
+RegistrationForm.propTypes = {
+  onUserCreated: PropTypes.func,
 };
 
 export default RegistrationForm;
