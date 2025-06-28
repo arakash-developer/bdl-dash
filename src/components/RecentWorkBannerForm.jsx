@@ -146,11 +146,27 @@ const RecentWorkBannerForm = () => {
 
         <div className="col-span-2">
           {/* prioroty */}
-          <Form.Item name="priority" label="Priority" initialValue={1}>
+          <Form.Item
+            name="priority"
+            label={
+              <span>
+                <span style={{ color: "red" }}>* </span>Priority
+              </span>
+            }
+            initialValue={1}
+          >
             <Input placeholder="Enter priority" type="number" />
           </Form.Item>
 
-          <Form.Item name="status" label="Status" initialValue="active">
+          <Form.Item
+            name="status"
+            label={
+              <span>
+                <span style={{ color: "red" }}>* </span>Status
+              </span>
+            }
+            initialValue="active"
+          >
             <Select placeholder="Enter status" name="status">
               <Select.Option value="active">Active</Select.Option>
               <Select.Option value="inactive">Inactive</Select.Option>
@@ -158,7 +174,15 @@ const RecentWorkBannerForm = () => {
           </Form.Item>
         </div>
 
-        <Form.Item className="col-span-2" name="series" label="Recent Work">
+        <Form.Item
+          className="col-span-2"
+          name="series"
+          label={
+            <span>
+              <span style={{ color: "red" }}>* </span>Recent Work
+            </span>
+          }
+        >
           <Select
             // mode="multiple"
             name="series"
