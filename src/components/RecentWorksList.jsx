@@ -1,16 +1,33 @@
 import { Button, Col, Image, Input, Modal, Popconfirm, Row, Table } from "antd";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import axios from "../axios";
 import RecentWorksContext from "../context/RecentWorksContext";
 import RecentWorkEdit from "./RecentWorkEdit";
 
 const RecentWorksList = () => {
   const { recentWorks, deleteRecentWork } = useContext(RecentWorksContext);
   const [searchTerm, setSearchTerm] = useState(""); // State to store the search input
+  const [series, setSeries] = useState([]); // State to store all series
 
   //Modal for View
   const [isModalVisibleForView, setIsModalVisibleForView] = useState(false);
   const [isModalVisibleForEdit, setIsModalVisibleForEdit] = useState(false);
   const [selectedRecentWork, setSelectedRecentWork] = useState(null);
+
+  // Fetch all series data
+  const getAllSeries = async () => {
+    try {
+      const res = await axios.get("/series");
+      console.log("Fetched Series Data:", res.data);
+      setSeries(res.data);
+    } catch (error) {
+      console.error("Error fetching series:", error.message);
+    }
+  };
+
+  useEffect(() => {
+    getAllSeries();
+  }, []);
 
   const handleViewCancel = () => {
     setIsModalVisibleForView(false);
@@ -34,7 +51,9 @@ const RecentWorksList = () => {
   const handleView = (record) => {
     setSelectedRecentWork(record);
     setIsModalVisibleForView(true);
-    console.log(record);
+    console.log("Selected Recent Work:", record);
+    console.log("All Series:", series);
+    console.log("Selected Work Series:", record.series);
   };
 
   const handleDelete = (record) => {
@@ -194,6 +213,43 @@ const RecentWorksList = () => {
               {selectedRecentWork?.description}
             </span>
           </p>
+
+          {/* Series Section */}
+          {selectedRecentWork?.series &&
+            selectedRecentWork.series.length > 0 && (
+              <div className="mb-4">
+                <p className="font-semibold text-xl mb-2">Selected Series:</p>
+                <div className="flex flex-wrap gap-2">
+                  {selectedRecentWork.series.map((seriesId, index) => {
+                    console.log(`Looking for series ID: ${seriesId}`);
+                    console.log("Available series:", series);
+
+                    // Try to find the series by _id
+                    let seriesItem = series.find((s) => s._id === seriesId);
+
+                    // If not found, try by id (in case the field name is different)
+                    if (!seriesItem) {
+                      seriesItem = series.find((s) => s.id === seriesId);
+                    }
+
+                    console.log(`Found series item:`, seriesItem);
+
+                    return (
+                      <span
+                        key={index}
+                        className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium"
+                      >
+                        {seriesItem
+                          ? seriesItem.title ||
+                            seriesItem.name ||
+                            "Unnamed Series"
+                          : `Series ID: ${seriesId}`}
+                      </span>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
         </div>
 
         <p style={{ fontWeight: "bold" }}>Images:</p>

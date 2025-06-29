@@ -1,4 +1,4 @@
-import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
 import {
   Button,
   Form,
@@ -51,6 +51,16 @@ const RecentWorkCreateForm = () => {
     setThumbnail(newThumbnailFileList);
 
   const onFinish = async (values) => {
+    // Custom validation: if video is uploaded, thumbnail must also be uploaded
+    if (videos.length > 0 && thumbnail.length === 0) {
+      notification.error({
+        message: "Validation Error",
+        description: "Thumbnail is required when video is uploaded!",
+        duration: 4,
+      });
+      return;
+    }
+
     setIsUploading(true); // Set uploading to true when starting
 
     const formData = new FormData();
@@ -65,11 +75,23 @@ const RecentWorkCreateForm = () => {
       images.forEach((image) => {
         formData.append("image", image.originFileObj);
       });
+    } else {
+      notification.error({
+        message: "Validation Error",
+        description: "At least one image is required!",
+        duration: 4,
+      });
+      setIsUploading(false);
+      return;
     }
-    if (videos) {
+
+    // Append video (optional)
+    if (videos.length > 0) {
       formData.append("video", videos[0].originFileObj);
     }
-    if (thumbnail) {
+
+    // Append thumbnail (only if video exists)
+    if (thumbnail.length > 0) {
       formData.append("thumbnail", thumbnail[0].originFileObj);
     }
 
@@ -164,9 +186,19 @@ const RecentWorkCreateForm = () => {
         <Form.Item
           className="mb-2 col-span-2"
           label="Upload Images"
-          name="image"
+          name="images"
           rules={[
-            { required: true, message: "Please upload at least one image!" },
+            {
+              required: true,
+              validator: () => {
+                if (images.length === 0) {
+                  return Promise.reject(
+                    new Error("Please upload at least one image!")
+                  );
+                }
+                return Promise.resolve();
+              },
+            },
           ]}
         >
           <Upload
@@ -182,26 +214,21 @@ const RecentWorkCreateForm = () => {
           </Upload>
         </Form.Item>
 
-        <div className="col-span-2 flex justify-between">
+        <div className="col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Video Upload */}
-          <Form.Item
-            className="mb-2"
-            name="video"
-            rules={[{ required: true, message: "Please upload a video!" }]}
-            label="Videos"
-          >
+          <Form.Item className="mb-2 w-full" label="Videos (Optional)">
             <Upload
               listType="picture-card"
-              multiple
               accept="video/*"
               fileList={videos}
               beforeUpload={() => false}
               onChange={handleVideoChange}
               maxCount={1}
+              className="w-full"
             >
               {videos.length >= 1 ? null : (
                 <div>
-                  <UploadOutlined />
+                  <PlusOutlined />
                   <div style={{ marginTop: 8 }}>Upload Video</div>
                 </div>
               )}
@@ -209,20 +236,15 @@ const RecentWorkCreateForm = () => {
           </Form.Item>
 
           {/* Thumbnail Upload */}
-          <Form.Item
-            className="mb-2"
-            label="Thumbnail"
-            name="thumbnail"
-            rules={[{ required: true, message: "Please upload a thumbnail!" }]}
-          >
+          <Form.Item className="mb-2 w-full" label="Thumbnail">
             <Upload
               listType="picture-card"
-              multiple
               accept="image/*"
               fileList={thumbnail}
               beforeUpload={() => false}
               onChange={handleThumbnailChange}
-              multiple
+              maxCount={1}
+              className="w-full"
             >
               {thumbnail.length >= 1 ? null : uploadButton}
             </Upload>

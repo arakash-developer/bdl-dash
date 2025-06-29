@@ -1,4 +1,4 @@
-import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
 import { Button, Card, Form, Progress, Select, Upload, message } from "antd";
 import { useContext, useState } from "react";
 import { MockupZoneContext } from "../context/MockupZoneContex";
@@ -19,10 +19,12 @@ const MockupZoneForm = () => {
     setFileList(newFileList);
   };
 
-  const handleVideoChange = ({ fileList: newVideoFileList }) =>
+  const handleVideoChange = ({ fileList: newVideoFileList }) => {
     setVideoFileList(newVideoFileList);
-  const handleThumbnailChange = ({ fileList: newThumbnailFileList }) =>
+  };
+  const handleThumbnailChange = ({ fileList: newThumbnailFileList }) => {
     setThumbnailFileList(newThumbnailFileList);
+  };
 
   const uploadButton = (
     <div>
@@ -32,6 +34,17 @@ const MockupZoneForm = () => {
   );
 
   const onFinish = async (values) => {
+    console.log("Form submission started");
+    console.log("Video files:", videoFileList);
+    console.log("Thumbnail files:", thumbnailFileList);
+    console.log("Image files:", fileList);
+
+    // Custom validation: if video is uploaded, thumbnail must also be uploaded
+    if (videoFileList.length > 0 && thumbnailFileList.length === 0) {
+      message.error("Thumbnail is required when video is uploaded!");
+      return;
+    }
+
     const formData = new FormData();
     formData.append("name", values.name);
 
@@ -40,16 +53,26 @@ const MockupZoneForm = () => {
       fileList.forEach((file) => {
         formData.append("image", file.originFileObj);
       });
+      console.log("Images added to formData");
+    } else {
+      message.error("At least one image is required!");
+      return;
     }
 
-    // Append single video file
+    // Append single video file (optional)
     if (videoFileList.length > 0) {
       formData.append("video", videoFileList[0].originFileObj);
+      console.log("Video added to formData");
+    } else {
+      console.log("No video uploaded - this should be fine");
     }
 
-    // Append single thumbnail file
+    // Append single thumbnail file (only if video exists)
     if (thumbnailFileList.length > 0) {
       formData.append("thumbnail", thumbnailFileList[0].originFileObj);
+      console.log("Thumbnail added to formData");
+    } else {
+      console.log("No thumbnail uploaded");
     }
 
     // Set up the config to track the progress
@@ -126,11 +149,20 @@ const MockupZoneForm = () => {
         {/* Upload multiple images (Pictures Wall) */}
         <Form.Item
           label="Upload Images (Pictures Wall)"
-          name="image"
+          name="images"
           rules={[
-            { required: true, message: "Please upload at least one image!" },
+            {
+              required: true,
+              validator: () => {
+                if (fileList.length === 0) {
+                  return Promise.reject(
+                    new Error("Please upload at least one image!")
+                  );
+                }
+                return Promise.resolve();
+              },
+            },
           ]}
-          roules={[{ required: true, message: "Please upload at least one image!" }]}
         >
           <Upload
             accept="image/*"
@@ -145,36 +177,32 @@ const MockupZoneForm = () => {
           </Upload>
         </Form.Item>
 
-        <div className="flex justify-between gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Upload single video */}
-          <Form.Item
-            label="Video"
-            name="video"
-            rules={[{ required: true, message: "Please upload a video!" }]}
-          >
+          <Form.Item label="Video (Optional)" className="w-full">
             <Upload
-              listType="picture"
               accept="video/*"
+              listType="picture-card"
               fileList={videoFileList}
               onChange={handleVideoChange}
               beforeUpload={() => false}
+              className="w-full"
+              maxCount={1}
             >
-              <Button icon={<UploadOutlined />}>Select Video</Button>
+              {videoFileList.length >= 1 ? null : uploadButton}
             </Upload>
           </Form.Item>
 
           {/* Upload single thumbnail */}
-          <Form.Item
-            label="Thumbnail"
-            name="thumbnail"
-            rules={[{ required: true, message: "Please upload a thumbnail!" }]}
-          >
+          <Form.Item label="Thumbnail" className="w-full">
             <Upload
               accept="image/*"
               listType="picture-card"
               fileList={thumbnailFileList}
               onChange={handleThumbnailChange}
               beforeUpload={() => false}
+              className="w-full"
+              maxCount={1}
             >
               {thumbnailFileList.length >= 1 ? null : uploadButton}
             </Upload>
