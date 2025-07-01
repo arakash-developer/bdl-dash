@@ -42,10 +42,14 @@ const RecentWorksList = () => {
   // Filter recent works based on search term
   const filteredRecentWorks = recentWorks.filter(
     (work) =>
-      work.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      work.client.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (work.title &&
+        work.title.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (work.projectId &&
+        work.projectId.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (work.client &&
+        work.client.toLowerCase().includes(searchTerm.toLowerCase())) ||
       (work.location &&
-        work.location.toLowerCase().includes(searchTerm.toLowerCase())) // Optional location filter
+        work.location.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
   const handleView = (record) => {
@@ -150,10 +154,10 @@ const RecentWorksList = () => {
       {/* Search Input */}
       <div className="mb-4 flex justify-end">
         <Input.Search
-          placeholder="Search by title, client or location"
+          placeholder="Search by Project Title, Project Name, Client, or Location"
           value={searchTerm}
           onChange={handleSearch}
-          style={{ width: 300 }}
+          style={{ width: 400 }}
         />
       </div>
 

@@ -1,7 +1,9 @@
-import { Button, Col, Image, Modal, Popconfirm, Row, Table } from "antd";
+import { Button, Col, Image, Input, Modal, Popconfirm, Row, Table } from "antd";
 import { useContext, useState } from "react";
 import { MockupZoneContext } from "../context/MockupZoneContex";
 import EditMockupZoneModal from "./EditMockupZoneModal";
+
+const { Search } = Input;
 
 const MockupZoneList = () => {
   const { mockupZone, loading, deleteMockupZone } =
@@ -9,6 +11,7 @@ const MockupZoneList = () => {
   const [selectedMockupZone, setSelectedMockupZone] = useState(null);
   const [isModalVisibleForView, setIsModalVisibleForView] = useState(false);
   const [isModalVisibleForEdit, setIsModalVisibleForEdit] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   /**
    * Shows the view mockup zone modal and sets the selected mockup zone to the
@@ -57,6 +60,20 @@ const MockupZoneList = () => {
     setIsModalVisibleForEdit(false);
     setSelectedMockupZone(null);
   };
+
+  /**
+   * Handles the search functionality by filtering mockup zones based on zone name
+   * @param {string} value - The search term
+   */
+  const handleSearch = (value) => {
+    setSearchTerm(value);
+  };
+
+  // Filter mockup zones based on search term
+  const filteredMockupZones =
+    mockupZone?.filter((zone) =>
+      zone.name.toLowerCase().includes(searchTerm.toLowerCase())
+    ) || [];
 
   const columns = [
     {
@@ -131,9 +148,28 @@ const MockupZoneList = () => {
 
   return (
     <>
+      {/* Search Bar */}
+      <div
+        style={{
+          marginBottom: 16,
+          display: "flex",
+          justifyContent: "flex-end",
+        }}
+      >
+        <Search
+          placeholder="Search by Zone Name..."
+          allowClear
+          onSearch={handleSearch}
+          onChange={(e) => handleSearch(e.target.value)}
+          style={{ width: 400 }}
+        />
+      </div>
+
       <Table
         columns={columns}
-        dataSource={mockupZone?.sort((a, b) => a.prioroty - b.prioroty) || []}
+        dataSource={
+          filteredMockupZones?.sort((a, b) => a.prioroty - b.prioroty) || []
+        }
         pagination={{ pageSize: 4 }}
         loading={loading}
         rowKey="_id" // Use _id as the unique key
